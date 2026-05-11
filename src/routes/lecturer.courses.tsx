@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -12,14 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
   Plus,
@@ -46,6 +40,14 @@ import {
   MessageSquare,
   History,
   Clock,
+  ArrowLeft,
+  FileText,
+  Video,
+  DownloadCloud,
+  CheckCircle2,
+  ChevronRight,
+  FileCheck,
+  ArrowUpRight,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -54,6 +56,9 @@ export const Route = createFileRoute("/lecturer/courses")({
 });
 
 function LecturerCoursesComponent() {
+  const [view, setView] = useState<"list" | "detail">("list");
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+
   const courses = [
     {
       id: 1,
@@ -67,19 +72,27 @@ function LecturerCoursesComponent() {
       size: "1.2 GB",
       lastUpdated: "2h ago",
       image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80",
+      description: "Comprehensive introduction to networking, IP addressing, and Cisco IOS basics.",
+      modules: 12,
+      resources: 45,
+      assessments: 8
     },
     {
       id: 2,
       title: "Advanced Routing & Switching",
       dept: "ICT",
       instructor: "James M.",
-      students: 0,
+      students: 42,
       progress: 40,
       status: "draft",
       offlineReady: false,
       size: "Pending",
       lastUpdated: "Yesterday",
       image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=800&q=80",
+      description: "Advanced CCNP level routing protocols and enterprise switching architectures.",
+      modules: 8,
+      resources: 22,
+      assessments: 4
     },
     {
       id: 3,
@@ -93,297 +106,267 @@ function LecturerCoursesComponent() {
       size: "850 MB",
       lastUpdated: "3 days ago",
       image: "https://images.unsplash.com/photo-1509391366360-12822a16d8bd?w=800&q=80",
-    },
-    {
-      id: 4,
-      title: "Intro to Python for Engineering",
-      dept: "ICT",
-      instructor: "S. Wanjiru",
-      students: 210,
-      progress: 15,
-      status: "published",
-      offlineReady: true,
-      size: "1.5 GB",
-      lastUpdated: "5h ago",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
-    },
+      description: "Practical guide to installing and maintaining solar panels and inverters in TVET settings.",
+      modules: 15,
+      resources: 60,
+      assessments: 12
+    }
   ];
+
+  const handleOpenCourse = (course: any) => {
+    setSelectedCourse(course);
+    setView("detail");
+  };
+
+  if (view === "detail" && selectedCourse) {
+    return (
+      <DashboardLayout role="lecturer" title={selectedCourse.title} subtitle={`Course Management • ${selectedCourse.dept}`}>
+        <div className="space-y-8 pb-20">
+          <Button variant="ghost" onClick={() => setView("list")} className="font-black gap-2 hover:bg-muted rounded-xl">
+             <ArrowLeft className="w-4 h-4" /> Back to My Courses
+          </Button>
+
+          {/* Course Detail Header */}
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+             <div className="w-full lg:w-80 h-48 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
+                <img src={selectedCourse.image} className="w-full h-full object-cover" alt="" />
+             </div>
+             <div className="flex-1 space-y-4">
+                <div className="flex items-center gap-3">
+                   <Badge className="bg-primary text-white border-none font-black px-3 py-1 rounded-lg uppercase tracking-widest text-[10px]">
+                      {selectedCourse.status}
+                   </Badge>
+                   <Badge variant="outline" className="border-border/60 font-black px-3 py-1 rounded-lg uppercase tracking-widest text-[10px]">
+                      {selectedCourse.dept}
+                   </Badge>
+                </div>
+                <h1 className="text-4xl font-black">{selectedCourse.title}</h1>
+                <p className="text-lg text-muted-foreground font-medium max-w-2xl">{selectedCourse.description}</p>
+                
+                <div className="flex flex-wrap gap-4 pt-2">
+                   <div className="flex items-center gap-2 bg-muted/40 px-4 py-2 rounded-2xl border border-border/60">
+                      <Users className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-black">{selectedCourse.students} Learners</span>
+                   </div>
+                   <div className="flex items-center gap-2 bg-muted/40 px-4 py-2 rounded-2xl border border-border/60">
+                      <BookOpen className="w-4 h-4 text-blue-500" />
+                      <span className="text-sm font-black">{selectedCourse.modules} Modules</span>
+                   </div>
+                   <div className="flex items-center gap-2 bg-muted/40 px-4 py-2 rounded-2xl border border-border/60">
+                      <Clock className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm font-black">Updated {selectedCourse.lastUpdated}</span>
+                   </div>
+                </div>
+             </div>
+          </div>
+
+          {/* Course Tabs */}
+          <Tabs defaultValue="modules" className="space-y-8">
+            <TabsList className="bg-muted/40 p-1 rounded-2xl border border-border/40 h-auto flex flex-wrap gap-1">
+              {["Overview", "Modules", "Resources", "Assessments", "Learners", "Analytics", "Sync"].map(tab => (
+                <TabsTrigger key={tab} value={tab.toLowerCase()} className="rounded-xl px-6 py-2.5 font-black data-[state=active]:bg-background data-[state=active]:shadow-lg transition-all">
+                  {tab}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="modules" className="space-y-6">
+               <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-black">Course Curriculum</h2>
+                  <Button className="rounded-xl font-black">
+                     <Plus className="w-4 h-4 mr-2" /> Add Module
+                  </Button>
+               </div>
+               
+               <div className="grid gap-4">
+                  {[1, 2, 3].map(i => (
+                    <Card key={i} className="border-border/40 bg-card/40 backdrop-blur-sm rounded-3xl overflow-hidden group">
+                       <div className="p-6 flex items-center justify-between cursor-pointer">
+                          <div className="flex items-center gap-4">
+                             <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
+                                {i}
+                             </div>
+                             <div>
+                                <h4 className="font-black text-lg">Module {i}: Fundamentals of Networking</h4>
+                                <p className="text-sm font-bold text-muted-foreground">4 Lessons • 2 Resources • 1 Quiz</p>
+                             </div>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                       </div>
+                       <div className="bg-muted/20 border-t border-border/40 p-6 space-y-3">
+                          {[
+                            { type: 'video', title: 'Introduction to OSI Model', duration: '12:45' },
+                            { type: 'pdf', title: 'Subnetting Cheat Sheet', size: '2.4 MB' },
+                            { type: 'quiz', title: 'TCP/IP Basics Assessment', questions: '15' }
+                          ].map((lesson, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-background/80 transition-all border border-transparent hover:border-border/40">
+                               <div className="flex items-center gap-3">
+                                  {lesson.type === 'video' ? <Video className="w-4 h-4 text-blue-500" /> : lesson.type === 'pdf' ? <FileText className="w-4 h-4 text-emerald-500" /> : <FileCheck className="w-4 h-4 text-amber-500" />}
+                                  <span className="text-sm font-black">{lesson.title}</span>
+                               </div>
+                               <div className="flex items-center gap-4">
+                                  <span className="text-[10px] font-black text-muted-foreground uppercase">{lesson.duration || lesson.size || lesson.questions + ' Qs'}</span>
+                                  <Badge variant="outline" className="bg-success/10 text-success border-none text-[10px] font-black uppercase">Offline Ready</Badge>
+                                  <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground"><MoreVertical className="w-4 h-4" /></Button>
+                               </div>
+                            </div>
+                          ))}
+                       </div>
+                    </Card>
+                  ))}
+               </div>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-6">
+                <div className="grid md:grid-cols-3 gap-6">
+                   <Card className="p-6 border-border/40 bg-card/40 rounded-3xl space-y-4">
+                      <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Average Score</p>
+                      <h3 className="text-4xl font-black">84%</h3>
+                      <Progress value={84} className="h-2" />
+                      <p className="text-[10px] font-bold text-success flex items-center gap-1">
+                        <ArrowUpRight className="w-3 h-3" /> 12% increase from last term
+                      </p>
+                   </Card>
+                   <Card className="p-6 border-border/40 bg-card/40 rounded-3xl space-y-4">
+                      <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Active Learners</p>
+                      <h3 className="text-4xl font-black">{selectedCourse.students}</h3>
+                      <div className="flex -space-x-2">
+                         {[1,2,3,4,5].map(i => <Avatar key={i} className="border-2 border-background h-8 w-8"><AvatarFallback>S</AvatarFallback></Avatar>)}
+                      </div>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">+12 New this week</p>
+                   </Card>
+                   <Card className="p-6 border-border/40 bg-card/40 rounded-3xl space-y-4">
+                      <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Offline Access</p>
+                      <h3 className="text-4xl font-black">92%</h3>
+                      <div className="flex items-center gap-2 text-success">
+                         <WifiOff className="w-5 h-5" />
+                         <span className="text-sm font-black">High Connectivity Autonomy</span>
+                      </div>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Optimized for TVET Hubs</p>
+                   </Card>
+                </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout
       role="lecturer"
       title="Course Management"
-      subtitle="Create, edit, and monitor your TVET curriculum performance."
+      subtitle="Manage your TVET curriculum and monitor learner engagement."
     >
       <div className="space-y-8">
         {/* Advanced Filters & Search Header */}
-        <div className="bg-background border border-border/60 rounded-2xl p-4 shadow-sm space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="relative flex-1 max-w-md w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="bg-card/40 backdrop-blur-sm border border-border/40 rounded-[2rem] p-6 shadow-xl space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="relative flex-1 max-w-xl w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
-                placeholder="Search your courses..."
-                className="pl-10 bg-muted/30 border-border/60 focus-visible:ring-accent/50 w-full"
+                placeholder="Search courses, departments, or lecturers..."
+                className="pl-12 h-14 rounded-2xl bg-background/50 border-border/60 focus-visible:ring-primary/50 text-lg font-medium"
               />
             </div>
 
-            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
-              <Button
-                variant="outline"
-                size="sm"
-                className="shrink-0 bg-accent/5 border-accent/20 text-accent hover:bg-accent/10"
-              >
-                <Package className="w-4 h-4 mr-2" /> Pending Pkgs (2)
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <Button variant="outline" className="h-14 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+                <SlidersHorizontal className="w-5 h-5 mr-2" /> Filters
               </Button>
-              <div className="h-6 w-px bg-border/60 mx-1 hidden md:block"></div>
-              <Button variant="outline" size="sm" className="shrink-0">
-                <SlidersHorizontal className="w-4 h-4 mr-2" /> Filters
-              </Button>
-              <div className="flex bg-muted/50 p-0.5 rounded-lg border border-border/50 shrink-0">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-md bg-background shadow-sm"
-                >
-                  <Grid className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-md text-muted-foreground"
-                >
-                  <List className="w-4 h-4" />
-                </Button>
-              </div>
-              <Button
-                asChild
-                className="shrink-0 bg-primary text-primary-foreground shadow-md shadow-primary/20"
-              >
+              <Button asChild className="h-14 px-8 rounded-2xl font-black bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                 <Link to="/lecturer/builder">
-                  <Plus className="w-4 h-4 mr-2" /> Create Course
+                  <Plus className="w-5 h-5 mr-2" /> Create New Course
                 </Link>
               </Button>
             </div>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar text-sm">
-            <Badge
-              variant="secondary"
-              className="bg-primary/10 text-primary hover:bg-primary/20 cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs"
-            >
-              All Courses (12)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs font-normal"
-            >
-              Active (8)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs font-normal"
-            >
-              Drafts (3)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs font-normal"
-            >
-              Archived (1)
-            </Badge>
-            <div className="h-6 w-px bg-border/60 mx-1"></div>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs font-normal"
-            >
-              ICT Dept
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-xs font-normal"
-            >
-              Engineering
-            </Badge>
+          <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
+            {["All Courses", "ICT", "Engineering", "Hospitality", "Electrical", "Automotive"].map((cat, i) => (
+              <Badge key={i} variant={i === 0 ? "default" : "outline"} className="px-6 py-2 rounded-xl font-black cursor-pointer whitespace-nowrap">
+                {cat}
+              </Badge>
+            ))}
           </div>
         </div>
 
         {/* Course Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
             <Card
               key={course.id}
-              className="group overflow-hidden border-border/60 hover:shadow-elegant hover:border-primary/40 transition-all duration-300 flex flex-col bg-background"
+              className="group overflow-hidden border-border/40 hover:shadow-2xl hover:border-primary/40 transition-all duration-500 rounded-[2.5rem] flex flex-col bg-card/40 backdrop-blur-sm"
             >
-              {/* Card Header with Image */}
-              <div className="relative h-44 bg-muted overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
+              <div className="relative h-56 overflow-hidden">
                 <img
                   src={course.image}
                   alt={course.title}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
-
-                <div className="absolute top-3 left-3 z-20 flex gap-2">
-                  <Badge
-                    className={`backdrop-blur-md border-none font-bold text-[10px] uppercase tracking-wider ${
-                      course.status === "published"
-                        ? "bg-success/90 text-success-foreground"
-                        : "bg-muted/90 text-muted-foreground"
-                    }`}
-                  >
-                    {course.status}
-                  </Badge>
-                  <Badge className="bg-background/80 text-foreground backdrop-blur border-none font-bold text-[10px] uppercase tracking-wider">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                <div className="absolute top-6 left-6 flex gap-2">
+                  <Badge className="bg-primary/90 text-white border-none font-black px-3 py-1 rounded-lg uppercase tracking-widest text-[10px]">
                     {course.dept}
                   </Badge>
-                </div>
-
-                <div className="absolute top-3 right-3 z-20 flex items-center gap-1">
-                  {course.offlineReady ? (
-                    <Badge
-                      variant="outline"
-                      className="bg-success/20 text-success-foreground border-none backdrop-blur-sm font-bold text-[10px] shadow-sm"
-                    >
+                  {course.offlineReady && (
+                    <Badge className="bg-success/90 text-white border-none font-black px-3 py-1 rounded-lg uppercase tracking-widest text-[10px]">
                       <WifiOff className="w-3 h-3 mr-1" /> Offline
                     </Badge>
-                  ) : (
-                    <Badge
-                      variant="outline"
-                      className="bg-destructive/20 text-white border-none backdrop-blur-sm font-bold text-[10px] shadow-sm"
-                    >
-                      <Lock className="w-3 h-3 mr-1" /> Cloud Only
-                    </Badge>
                   )}
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 rounded-full bg-background/20 backdrop-blur text-white hover:bg-background/80"
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem>
-                        <Copy className="w-4 h-4 mr-2" /> Duplicate
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Share2 className="w-4 h-4 mr-2" /> Share / Invite
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Globe className="w-4 h-4 mr-2" /> Publish Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-destructive focus:bg-destructive/10">
-                        <Archive className="w-4 h-4 mr-2" /> Archive Course
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
 
-                <div className="absolute bottom-3 left-3 right-3 z-20">
-                  <h3 className="font-bold text-white text-base leading-tight line-clamp-2 mb-1">
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h3 className="text-xl font-black text-white leading-tight mb-2 group-hover:text-primary transition-colors">
                     {course.title}
                   </h3>
-                  <p className="text-[10px] text-white/70 font-medium flex items-center gap-1">
-                    <Clock className="w-3 h-3" /> Updated {course.lastUpdated}
-                  </p>
+                  <div className="flex items-center gap-3">
+                     <div className="flex -space-x-2">
+                        {[1,2,3].map(i => <Avatar key={i} className="h-6 w-6 border-2 border-black"><AvatarFallback>S</AvatarFallback></Avatar>)}
+                     </div>
+                     <span className="text-xs font-bold text-white/80">{course.students} Learners Enrolled</span>
+                  </div>
                 </div>
               </div>
 
-              <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                {/* Metrics Row */}
-                <div className="flex justify-between items-center py-1">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Learners
-                    </span>
-                    <span className="text-sm font-bold flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-primary" /> {course.students}
-                    </span>
-                  </div>
-                  <div className="flex flex-col text-right">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Avg Progress
-                    </span>
-                    <span className="text-sm font-bold text-primary">{course.progress}%</span>
-                  </div>
+              <CardContent className="p-8 space-y-6">
+                <div className="space-y-2">
+                   <div className="flex justify-between text-xs font-black uppercase tracking-widest text-muted-foreground">
+                      <span>Curriculum Completion</span>
+                      <span className="text-primary">{course.progress}%</span>
+                   </div>
+                   <Progress value={course.progress} className="h-2" />
                 </div>
 
-                <Progress
-                  value={course.progress}
-                  className="h-1.5 bg-muted"
-                  indicatorClassName="bg-primary"
-                />
-
-                <div className="flex items-center gap-2 pt-2">
-                  <Avatar className="h-6 w-6 border">
-                    <AvatarFallback className="text-[8px] bg-muted">
-                      {course.instructor.split(" ")[0][0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-[10px] text-muted-foreground font-medium">
-                    Instructor: {course.instructor}
-                  </span>
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="bg-muted/30 p-3 rounded-2xl border border-border/40">
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Status</p>
+                      <p className="text-xs font-bold capitalize">{course.status}</p>
+                   </div>
+                   <div className="bg-muted/30 p-3 rounded-2xl border border-border/40">
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Updated</p>
+                      <p className="text-xs font-bold">{course.lastUpdated}</p>
+                   </div>
                 </div>
               </CardContent>
 
-              <CardFooter className="p-4 pt-0 gap-2 mt-auto">
-                <Button
-                  variant="outline"
-                  className="flex-1 text-xs h-9 border-border/60 hover:bg-muted"
-                  asChild
-                >
-                  <Link to="/lecturer/builder">
-                    <Edit className="w-3.5 h-3.5 mr-2" /> Edit
-                  </Link>
+              <CardFooter className="p-8 pt-0 gap-3">
+                <Button className="flex-1 rounded-2xl h-12 font-black shadow-lg shadow-primary/20" onClick={() => handleOpenCourse(course)}>
+                  Open Portal
                 </Button>
-                <Button className="flex-1 text-xs h-9 bg-primary/10 text-primary hover:bg-primary/20 border-0 shadow-none">
-                  <BarChart3 className="w-3.5 h-3.5 mr-2" /> Analytics
+                <Button variant="outline" className="rounded-2xl h-12 w-12 p-0 border-border/60 hover:bg-muted" asChild>
+                   <Link to="/lecturer/builder">
+                    <Edit className="w-5 h-5" />
+                   </Link>
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-md border border-border/60 text-muted-foreground hover:text-accent"
-                >
-                  <Package className="w-4 h-4" />
+                <Button variant="outline" className="rounded-2xl h-12 w-12 p-0 border-border/60 hover:bg-muted">
+                    <MoreVertical className="w-5 h-5" />
                 </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
-
-        {/* Multi-Tab Detail View Placeholder (for when a course is selected/opened) */}
-        <Card className="border-border/60 bg-muted/20 border-dashed">
-          <CardContent className="p-12 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-background border border-border shadow-sm flex items-center justify-center mx-auto text-muted-foreground opacity-50">
-              <LayoutDashboard className="w-8 h-8" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold">Course Insights Center</h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Select a course to view detailed learner progress, manage modules, and generate
-                offline deployment packages for your institution.
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 pt-2">
-              <Badge variant="outline" className="bg-background">
-                Modules Tracker
-              </Badge>
-              <Badge variant="outline" className="bg-background">
-                Assessment Grades
-              </Badge>
-              <Badge variant="outline" className="bg-background">
-                Offline Sync Status
-              </Badge>
-              <Badge variant="outline" className="bg-background">
-                Engagement Heatmap
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </DashboardLayout>
   );

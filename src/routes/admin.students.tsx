@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -6,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardFooter,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,454 +19,386 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Search,
-  Plus,
   UserPlus,
-  Clock,
+  FileDown,
   MoreVertical,
-  CheckCircle2,
-  Filter,
-  SlidersHorizontal,
-  Download,
-  FileUp,
-  RefreshCw,
-  AlertTriangle,
   MessageSquare,
-  ShieldAlert,
+  BarChart3,
+  Wifi,
   WifiOff,
-  Laptop,
-  Activity,
-  GraduationCap,
-  ChevronDown,
+  CheckCircle2,
+  AlertTriangle,
+  Download,
+  Calendar,
+  Clock,
+  ArrowLeft,
+  ChevronRight,
+  Filter,
+  ArrowUpRight,
+  User,
   MoreHorizontal,
-  UserMinus,
   Mail,
-  Key,
-  History,
-  FileText,
-  Ban,
-  Users,
+  GraduationCap,
+  RefreshCw,
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 
 export const Route = createFileRoute("/admin/students")({
-  head: () => ({ meta: [{ title: "Student Management — JifunzeHub" }] }),
   component: AdminStudentsComponent,
 });
 
+const performanceData = [
+  { name: "Week 1", attendance: 85, grades: 68 },
+  { name: "Week 2", attendance: 92, grades: 72 },
+  { name: "Week 3", attendance: 88, grades: 65 },
+  { name: "Week 4", attendance: 95, grades: 82 },
+  { name: "Week 5", attendance: 82, grades: 78 },
+  { name: "Week 6", attendance: 98, grades: 85 },
+];
+
 function AdminStudentsComponent() {
+  const [view, setView] = useState<"list" | "detail">("list");
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+
   const students = [
     {
-      id: "STU-001",
+      id: "KPU-2026-001",
       name: "Amina Hussein",
-      admNo: "KIP/ICT/2024/001",
-      department: "ICT",
-      course: "Networking Essentials",
-      syncStatus: "Synced",
-      device: "Laptop (Win 11)",
-      lastActivity: "12m ago",
-      score: 92,
-      offlineActivity: 88,
-      avatar: "AH",
+      dept: "ICT",
+      enrolled: 4,
+      progress: 88,
+      avgScore: 92,
+      syncStatus: "synced",
+      attendance: 95,
+      avatar: "https://i.pravatar.cc/150?u=amina"
     },
     {
-      id: "STU-002",
-      name: "John Ochieng",
-      admNo: "KIP/ELE/2024/042",
-      department: "Electrical",
-      course: "Solar Installation",
-      syncStatus: "Offline",
-      device: "Android Tab",
-      lastActivity: "2d ago",
-      score: 45,
-      offlineActivity: 12,
-      avatar: "JO",
-      warning: true,
+      id: "KPU-2026-042",
+      name: "David Mutua",
+      dept: "Electrical",
+      enrolled: 3,
+      progress: 45,
+      avgScore: 58,
+      syncStatus: "offline",
+      attendance: 72,
+      avatar: "https://i.pravatar.cc/150?u=david"
     },
     {
-      id: "STU-003",
+      id: "KPU-2026-112",
       name: "Sarah Wanjiru",
-      admNo: "KIP/HOS/2024/115",
-      department: "Hospitality",
-      course: "Food & Beverage",
-      syncStatus: "Synced",
-      device: "Smartphone",
-      lastActivity: "1h ago",
-      score: 78,
-      offlineActivity: 45,
-      avatar: "SW",
+      dept: "ICT",
+      enrolled: 5,
+      progress: 72,
+      avgScore: 84,
+      syncStatus: "synced",
+      attendance: 98,
+      avatar: "https://i.pravatar.cc/150?u=sarah"
     },
     {
-      id: "STU-004",
-      name: "Peter Mutua",
-      admNo: "KIP/PLU/2024/089",
-      department: "Plumbing",
-      course: "Pipe Fitting",
-      syncStatus: "Syncing",
-      device: "Laptop (Win 10)",
-      lastActivity: "Just now",
-      score: 64,
-      offlineActivity: 92,
-      avatar: "PM",
-    },
-    {
-      id: "STU-005",
-      name: "David Kiptoo",
-      admNo: "KIP/ICT/2024/012",
-      department: "ICT",
-      course: "Software Dev",
-      syncStatus: "Conflict",
-      device: "Desktop (Lab)",
-      lastActivity: "3h ago",
-      score: 85,
-      offlineActivity: 74,
-      avatar: "DK",
-      conflict: true,
-    },
+      id: "KPU-2026-205",
+      name: "John Kamau",
+      dept: "Mechanical",
+      enrolled: 3,
+      progress: 12,
+      avgScore: 42,
+      syncStatus: "pending",
+      attendance: 45,
+      avatar: "https://i.pravatar.cc/150?u=john"
+    }
   ];
 
+  const handleOpenStudent = (student: any) => {
+    setSelectedStudent(student);
+    setView("detail");
+  };
+
+  if (view === "detail" && selectedStudent) {
+    return (
+      <DashboardLayout role="admin" title={selectedStudent.name} subtitle={`Student Profile • ${selectedStudent.id}`}>
+        <div className="space-y-8 pb-20">
+          <Button variant="ghost" onClick={() => setView("list")} className="font-black gap-2 hover:bg-muted rounded-xl">
+             <ArrowLeft className="w-4 h-4" /> Back to Student Directory
+          </Button>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+             {/* Profile Card */}
+             <div className="space-y-8">
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                   <div className="flex flex-col items-center text-center space-y-4">
+                      <Avatar className="h-32 w-32 border-4 border-white shadow-2xl">
+                         <AvatarImage src={selectedStudent.avatar} />
+                         <AvatarFallback className="text-4xl font-black">{selectedStudent.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="space-y-1">
+                         <h2 className="text-2xl font-black">{selectedStudent.name}</h2>
+                         <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">{selectedStudent.dept} Department</p>
+                      </div>
+                      <Badge className={`${selectedStudent.attendance >= 80 ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'} border-none font-black px-4 py-1.5 rounded-xl uppercase tracking-widest text-[10px]`}>
+                         {selectedStudent.attendance}% Attendance
+                      </Badge>
+                      
+                      <div className="flex gap-2 w-full pt-4">
+                         <Button variant="outline" className="flex-1 rounded-xl font-black gap-2 border-border/60">
+                            <Mail className="w-4 h-4" /> Email
+                         </Button>
+                         <Button variant="outline" className="flex-1 rounded-xl font-black gap-2 border-border/60">
+                            <Download className="w-4 h-4" /> Records
+                         </Button>
+                      </div>
+                   </div>
+
+                   <div className="mt-8 space-y-4 border-t border-border/40 pt-8">
+                      <div className="flex justify-between items-center">
+                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Admission No.</span>
+                         <span className="text-sm font-black">{selectedStudent.id}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Institution</span>
+                         <span className="text-sm font-black">Kisumu Polytechnic</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Account Status</span>
+                         <Badge className="bg-success text-white border-none text-[9px] font-black uppercase">ACTIVE</Badge>
+                      </div>
+                   </div>
+                </Card>
+
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                   <h4 className="text-lg font-black mb-6">Device Activity</h4>
+                   <div className="space-y-4">
+                      <div className="p-4 bg-muted/30 rounded-2xl border border-border/40 flex items-center gap-4">
+                         <div className="p-2 bg-background rounded-xl shrink-0">
+                            <Wifi className="w-4 h-4 text-primary" />
+                         </div>
+                         <div className="flex-1">
+                            <p className="text-xs font-black">SAMSUNG-TAB-02</p>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Last Synced 2h ago</p>
+                         </div>
+                         <Badge variant="outline" className="rounded-lg text-[9px] font-black uppercase">Online</Badge>
+                      </div>
+                      <div className="p-4 bg-muted/30 rounded-2xl border border-border/40 flex items-center gap-4">
+                         <div className="p-2 bg-background rounded-xl shrink-0">
+                            <Download className="w-4 h-4 text-emerald-500" />
+                         </div>
+                         <div className="flex-1">
+                            <p className="text-xs font-black">1.2 GB Cached</p>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">12 Lessons Downloaded</p>
+                         </div>
+                      </div>
+                   </div>
+                </Card>
+             </div>
+
+             {/* Analytics Column */}
+             <div className="lg:col-span-2 space-y-8">
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                   <div className="flex justify-between items-center mb-8">
+                      <h3 className="text-2xl font-black">Academic Trends</h3>
+                      <div className="flex gap-4">
+                         <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-primary"></div>
+                            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Attendance</span>
+                         </div>
+                         <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Assessment Avg</span>
+                         </div>
+                      </div>
+                   </div>
+                   
+                   <div className="h-[400px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                         <LineChart data={performanceData}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                            <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                            <Tooltip 
+                               contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '20px', border: '1px solid hsl(var(--border))', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                               itemStyle={{ fontWeight: 'black' }}
+                            />
+                            <Line type="monotone" dataKey="attendance" stroke="var(--color-primary)" strokeWidth={4} dot={{ r: 6, strokeWidth: 0, fill: 'var(--color-primary)' }} />
+                            <Line type="monotone" dataKey="grades" stroke="#3b82f6" strokeWidth={4} dot={{ r: 6, strokeWidth: 0, fill: '#3b82f6' }} />
+                         </LineChart>
+                      </ResponsiveContainer>
+                   </div>
+                </Card>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                      <h4 className="text-lg font-black mb-6">Enrolled Courses</h4>
+                      <div className="space-y-4">
+                         {[
+                           { title: "Networking Essentials", progress: 88, status: "Active" },
+                           { title: "Solar Installation", progress: 45, status: "Active" },
+                           { title: "Mobile Apps 101", progress: 100, status: "Completed" }
+                         ].map((c, i) => (
+                           <div key={i} className="space-y-3 p-4 rounded-2xl bg-muted/30 border border-border/40">
+                              <div className="flex justify-between items-start">
+                                 <h5 className="font-black text-sm">{c.title}</h5>
+                                 <Badge className={`${c.status === 'Completed' ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'} border-none text-[9px] font-black uppercase`}>{c.status}</Badge>
+                              </div>
+                              <div className="space-y-1">
+                                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                                    <span>Progress</span>
+                                    <span>{c.progress}%</span>
+                                 </div>
+                                 <Progress value={c.progress} className="h-1.5" />
+                              </div>
+                           </div>
+                         ))}
+                      </div>
+                   </Card>
+
+                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                      <h4 className="text-lg font-black mb-6">Risk Assessment</h4>
+                      <div className="space-y-6">
+                         {selectedStudent.attendance < 80 ? (
+                           <div className="p-4 rounded-2xl bg-destructive/10 border border-destructive/20 space-y-2">
+                              <div className="flex items-center gap-2 text-destructive">
+                                 <AlertTriangle className="w-5 h-5" />
+                                 <p className="text-sm font-black">Attendance Warning</p>
+                              </div>
+                              <p className="text-xs font-medium text-destructive/70">Learner's attendance has dropped below 80% this month. Recommended for guidance session.</p>
+                           </div>
+                         ) : (
+                           <div className="p-4 rounded-2xl bg-success/10 border border-success/20 space-y-2">
+                              <div className="flex items-center gap-2 text-success">
+                                 <CheckCircle2 className="w-5 h-5" />
+                                 <p className="text-sm font-black">Consistent Performance</p>
+                              </div>
+                              <p className="text-xs font-medium text-success/70">Learner is meeting all institutional engagement benchmarks.</p>
+                           </div>
+                         )}
+
+                         <div className="bg-background/80 p-6 rounded-[1.5rem] border border-border/40 text-center space-y-2">
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Predictive Completion</p>
+                            <h5 className="text-3xl font-black text-primary">On-Track</h5>
+                            <p className="text-xs font-bold">Estimated finish: Dec 2026</p>
+                         </div>
+                      </div>
+                   </Card>
+                </div>
+             </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
-    <DashboardLayout
-      role="admin"
-      title="Student Management"
-      subtitle="Complete institutional visibility of learner progress, device sync health, and academic performance."
-    >
+    <DashboardLayout role="admin" title="Student Ecosystem" subtitle="Manage institution-wide student data and monitor engagement health.">
       <div className="space-y-8 pb-20">
-        {/* Quick Stats Banner */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StudentStatCard title="Total Students" value="1,248" icon={Users} color="text-primary" />
-          <StudentStatCard
-            title="Active Today"
-            value="842"
-            icon={Activity}
-            color="text-emerald-500"
-          />
-          <StudentStatCard
-            title="Offline Syncs"
-            value="156"
-            icon={WifiOff}
-            color="text-amber-500"
-          />
-          <StudentStatCard
-            title="Sync Failures"
-            value="12"
-            icon={AlertTriangle}
-            color="text-destructive"
-          />
-        </div>
-
-        {/* Smart Alerts Center */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <Card className="border-amber-500/20 bg-amber-500/5 shadow-sm">
-            <CardHeader className="py-4 flex flex-row items-center justify-between space-y-0">
-              <div className="flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-amber-600" />
-                <CardTitle className="text-sm font-black uppercase tracking-widest text-amber-700">
-                  Sync Anomalies
-                </CardTitle>
-              </div>
-              <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200">
-                4 Students
-              </Badge>
-            </CardHeader>
-            <CardContent className="pb-4">
-              <p className="text-xs text-amber-800/80 font-medium leading-relaxed">
-                Students in Electrical Dept have reported sync conflicts due to duplicate local
-                storage indexes.
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-destructive/20 bg-destructive/5 shadow-sm">
-            <CardHeader className="py-4 flex flex-row items-center justify-between space-y-0">
-              <div className="flex items-center gap-2">
-                <Ban className="w-4 h-4 text-destructive" />
-                <CardTitle className="text-sm font-black uppercase tracking-widest text-destructive">
-                  At-Risk Learners
-                </CardTitle>
-              </div>
-              <Badge
-                variant="outline"
-                className="bg-destructive/10 text-destructive border-destructive/20"
-              >
-                8 Students
-              </Badge>
-            </CardHeader>
-            <CardContent className="pb-4">
-              <p className="text-xs text-destructive/80 font-medium leading-relaxed">
-                These students haven't synced their offline activity for more than 14 days. Possible
-                device failure.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Management Controls */}
-        <div className="bg-background border border-border/60 rounded-2xl p-4 shadow-sm space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="relative flex-1 max-w-md w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        {/* Advanced Filters */}
+        <div className="bg-card/40 backdrop-blur-sm border border-border/40 rounded-[2rem] p-6 shadow-xl space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="relative flex-1 max-w-xl w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
-                placeholder="Search name, admission number, department..."
-                className="pl-10 bg-muted/30 border-border/60 focus-visible:ring-primary/50"
+                placeholder="Search students by name, ID, or department..."
+                className="pl-12 h-14 rounded-2xl bg-background/50 border-border/60 focus-visible:ring-primary/50 text-lg font-medium"
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-              <Button variant="outline" size="sm" className="shrink-0">
-                <SlidersHorizontal className="w-4 h-4 mr-2" /> Filters
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <Button variant="outline" className="h-14 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+                <Filter className="w-5 h-5 mr-2" /> Advanced Filters
               </Button>
-              <Button variant="outline" size="sm" className="shrink-0">
-                <FileUp className="w-4 h-4 mr-2" /> Bulk Import
-              </Button>
-              <div className="h-8 w-px bg-border/60 mx-1 hidden md:block"></div>
-              <Button className="bg-primary text-primary-foreground shadow-md shadow-primary/20 font-bold">
-                <UserPlus className="w-4 h-4 mr-2" /> Add Student
+              <Button className="h-14 px-8 rounded-2xl font-black bg-primary text-white shadow-lg shadow-primary/20">
+                <UserPlus className="w-5 h-5 mr-2" /> Add Student
               </Button>
             </div>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
-            <Badge
-              variant="secondary"
-              className="bg-primary/10 text-primary hover:bg-primary/20 cursor-pointer shrink-0 rounded-full px-3 py-1 text-[10px] font-bold"
-            >
-              All Students (1,248)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-[10px] font-bold"
-            >
-              Synced Today (842)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-[10px] font-bold text-amber-600 border-amber-200 bg-amber-50/50"
-            >
-              Offline &gt; 3 Days (156)
-            </Badge>
-            <Badge
-              variant="outline"
-              className="hover:bg-muted cursor-pointer shrink-0 rounded-full px-3 py-1 text-[10px] font-bold text-destructive border-destructive/20 bg-destructive/5"
-            >
-              At Risk (8)
-            </Badge>
+          <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
+            {["All Students", "Active", "Offline Only", "At Risk", "High Performers", "ICT Dept", "Mechanical"].map((cat, i) => (
+              <Badge key={i} variant={i === 0 ? "default" : "outline"} className="px-6 py-2 rounded-xl font-black cursor-pointer whitespace-nowrap">
+                {cat}
+              </Badge>
+            ))}
           </div>
         </div>
 
         {/* Student Table */}
-        <Card className="border-border/60 shadow-soft overflow-hidden">
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader className="bg-muted/30">
-                <TableRow className="hover:bg-transparent border-b border-border/50">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Student & Adm
-                  </TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Course & Dept
-                  </TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Sync Status
-                  </TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Last Activity
-                  </TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Performance
-                  </TableHead>
-                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                    Actions
-                  </TableHead>
+        <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] shadow-xl overflow-hidden">
+          <Table>
+            <TableHeader className="bg-muted/30">
+              <TableRow className="border-border/40 hover:bg-transparent">
+                <TableHead className="font-black uppercase tracking-widest text-[10px] py-6 px-8">Student</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px]">Department</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px]">Courses</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px]">Sync Health</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px]">Attendance</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px] text-right pr-8">Avg Score</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {students.map((student) => (
+                <TableRow key={student.id} className="border-border/40 hover:bg-muted/20 transition-colors group cursor-pointer" onClick={() => handleOpenStudent(student)}>
+                  <TableCell className="py-6 px-8">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12 border-2 border-background shadow-lg">
+                        <AvatarImage src={student.avatar} />
+                        <AvatarFallback>{student.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-black text-sm group-hover:text-primary transition-colors">{student.name}</p>
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{student.id}</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="rounded-lg font-bold border-border/60">{student.dept}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                       <GraduationCap className="w-4 h-4 text-primary" />
+                       <span className="text-xs font-black">{student.enrolled} Enrolled</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      {student.syncStatus === 'synced' ? (
+                        <Wifi className="w-4 h-4 text-success" />
+                      ) : student.syncStatus === 'pending' ? (
+                        <RefreshCw className="w-4 h-4 text-amber-500 animate-spin-slow" />
+                      ) : (
+                        <WifiOff className="w-4 h-4 text-destructive" />
+                      )}
+                      <span className="text-xs font-bold capitalize">{student.syncStatus}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3 w-32">
+                      <Progress value={student.attendance} className={`h-1.5 ${student.attendance < 80 ? 'text-destructive' : ''}`} />
+                      <span className="text-xs font-black">{student.attendance}%</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right pr-8">
+                    <div className="flex flex-col items-end">
+                       <span className={`text-lg font-black ${student.avgScore >= 80 ? 'text-success' : student.avgScore >= 50 ? 'text-amber-500' : 'text-destructive'}`}>
+                          {student.avgScore}%
+                       </span>
+                       <Button size="icon" variant="ghost" className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors"><ChevronRight className="w-4 h-4" /></Button>
+                    </div>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {students.map((student) => (
-                  <TableRow
-                    key={student.id}
-                    className="group border-b border-border/40 hover:bg-muted/10 transition-colors"
-                  >
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9 border border-border/50">
-                          <AvatarFallback
-                            className={`text-[10px] font-black ${student.warning ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"}`}
-                          >
-                            {student.avatar}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-black uppercase tracking-tight text-sm">
-                            {student.name}
-                          </p>
-                          <p className="text-[10px] text-muted-foreground font-bold">
-                            {student.admNo}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="space-y-0.5">
-                        <p className="font-bold text-xs">{student.course}</p>
-                        <Badge variant="outline" className="text-[9px] font-bold py-0">
-                          {student.department}
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <Badge
-                          variant="outline"
-                          className={`w-fit text-[9px] font-black uppercase tracking-widest ${
-                            student.syncStatus === "Synced"
-                              ? "bg-success/10 text-success border-success/30"
-                              : student.syncStatus === "Offline"
-                                ? "bg-muted text-muted-foreground border-border"
-                                : student.syncStatus === "Conflict"
-                                  ? "bg-destructive/10 text-destructive border-destructive/30"
-                                  : "bg-amber-500/10 text-amber-600 border-amber-500/30"
-                          }`}
-                        >
-                          {student.syncStatus === "Synced" && (
-                            <CheckCircle2 className="w-3 h-3 mr-1" />
-                          )}
-                          {student.syncStatus === "Conflict" && (
-                            <AlertTriangle className="w-3 h-3 mr-1" />
-                          )}
-                          {student.syncStatus}
-                        </Badge>
-                        <span className="text-[9px] text-muted-foreground font-medium flex items-center gap-1">
-                          <Laptop className="w-3 h-3" /> {student.device}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="space-y-0.5">
-                        <p className="text-xs font-bold">{student.lastActivity}</p>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest flex items-center gap-1">
-                          <History className="w-3 h-3" /> LAN Session
-                        </p>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="space-y-2 w-32">
-                        <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest">
-                          <span className="text-muted-foreground">Score</span>
-                          <span
-                            className={student.score < 50 ? "text-destructive" : "text-primary"}
-                          >
-                            {student.score}%
-                          </span>
-                        </div>
-                        <Progress
-                          value={student.score}
-                          className="h-1 bg-muted"
-                          indicatorClassName={student.score < 50 ? "bg-destructive" : "bg-primary"}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                          >
-                            <MoreHorizontal className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                          <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest">
-                            Student Actions
-                          </DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <FileText className="w-4 h-4 mr-2" /> View Academic Profile
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Mail className="w-4 h-4 mr-2" /> Send Message / Alert
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <History className="w-4 h-4 mr-2" /> View Offline Logs
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <RefreshCw className="w-4 h-4 mr-2" /> Force Sync Device
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Key className="w-4 h-4 mr-2" /> Reset Local Pin
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
-                            <UserMinus className="w-4 h-4 mr-2" /> Suspend Account
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter className="bg-muted/10 border-t border-border/50 py-3 px-6 flex items-center justify-between">
-            <p className="text-xs text-muted-foreground font-medium">
-              Showing <span className="font-bold text-foreground">5</span> of{" "}
-              <span className="font-bold text-foreground">1,248</span> students
-            </p>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 text-[10px] font-black uppercase tracking-widest px-4 border-border/60"
-                disabled
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 text-[10px] font-black uppercase tracking-widest px-4 border-border/60"
-              >
-                Next Page
-              </Button>
-            </div>
-          </CardFooter>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     </DashboardLayout>
-  );
-}
-
-function StudentStatCard({ title, value, icon: Icon, color }: any) {
-  return (
-    <Card className="border-border/60 hover:shadow-soft transition-all bg-background overflow-hidden relative">
-      <div className={`absolute top-0 right-0 p-4 opacity-5 ${color}`}>
-        <Icon className="w-16 h-16" />
-      </div>
-      <CardContent className="p-6 relative z-10">
-        <div className="flex flex-col gap-1">
-          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-            {title}
-          </p>
-          <div className="flex items-center gap-3">
-            <h3 className="text-3xl font-black tracking-tighter">{value}</h3>
-            <div className={`p-1.5 rounded-lg bg-muted/50 ${color}`}>
-              <Icon className="w-4 h-4" />
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
   );
 }

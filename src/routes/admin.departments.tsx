@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -8,501 +9,310 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Building2,
-  Users,
-  BookOpen,
-  Plus,
-  MoreVertical,
-  Settings2,
   Search,
-  Filter,
-  SlidersHorizontal,
-  Grid,
-  List,
-  MoreHorizontal,
-  Download,
-  FileDown,
-  Briefcase,
+  Plus,
+  Users,
   GraduationCap,
-  Laptop,
-  WifiOff,
-  ArrowUpRight,
+  BookOpen,
   BarChart3,
-  Edit,
-  Trash2,
-  Archive,
-  Copy,
-  ExternalLink,
-  Activity,
-  RefreshCw,
+  MoreVertical,
+  ChevronRight,
   TrendingUp,
+  FileText,
+  Clock,
+  ArrowLeft,
+  Building2,
+  Mail,
+  MoreHorizontal,
+  ArrowUpRight,
+  WifiOff,
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 
 export const Route = createFileRoute("/admin/departments")({
-  head: () => ({ meta: [{ title: "Department Management — JifunzeHub" }] }),
-  component: DepartmentsComponent,
+  component: AdminDepartmentsComponent,
 });
 
-function DepartmentsComponent() {
+function AdminDepartmentsComponent() {
+  const [view, setView] = useState<"grid" | "detail">("grid");
+  const [selectedDept, setSelectedDept] = useState<any>(null);
+
   const departments = [
     {
-      id: "D01",
-      name: "ICT & Computing",
-      head: "Eng. Kamau",
+      id: "DEPT-ICT",
+      name: "ICT & Digital Media",
+      head: "Prof. Benson Omari",
       students: 450,
       lecturers: 12,
-      courses: 24,
-      completionRate: 82,
-      offlineActivity: 94,
-      status: "Active",
-      icon: Laptop,
-      color: "text-blue-500",
-      bg: "bg-blue-500/10",
-    },
-    {
-      id: "D02",
-      name: "Electrical Engineering",
-      head: "Mr. Omondi",
-      students: 320,
-      lecturers: 8,
       courses: 15,
-      completionRate: 64,
-      offlineActivity: 78,
-      status: "Active",
-      icon: Activity,
-      color: "text-emerald-500",
-      bg: "bg-emerald-500/10",
+      completionRate: 82,
+      performance: "Optimal",
+      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80"
     },
     {
-      id: "D03",
-      name: "Mechanical & Automotive",
-      head: "Ms. Wanjiku",
-      students: 210,
-      lecturers: 6,
+      id: "DEPT-ELEC",
+      name: "Electrical Engineering",
+      head: "Eng. Sarah Wanjiru",
+      students: 312,
+      lecturers: 8,
       courses: 10,
-      completionRate: 42,
-      offlineActivity: 85,
-      status: "Active",
-      icon: Settings2,
-      color: "text-amber-500",
-      bg: "bg-amber-500/10",
+      completionRate: 64,
+      performance: "Stable",
+      image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80"
     },
     {
-      id: "D04",
-      name: "Hospitality & Tourism",
-      head: "Mrs. Mutua",
-      students: 180,
-      lecturers: 5,
+      id: "DEPT-MECH",
+      name: "Mechanical Engineering",
+      head: "Dr. Kamau John",
+      students: 284,
+      lecturers: 9,
       courses: 8,
-      completionRate: 75,
-      offlineActivity: 62,
-      status: "Active",
-      icon: Briefcase,
-      color: "text-indigo-500",
-      bg: "bg-indigo-500/10",
-    },
-    {
-      id: "D05",
-      name: "Plumbing & Construction",
-      head: "Eng. Kiprotich",
-      students: 120,
-      lecturers: 4,
-      courses: 6,
-      completionRate: 58,
-      offlineActivity: 88,
-      status: "Active",
-      icon: Building2,
-      color: "text-purple-500",
-      bg: "bg-purple-500/10",
-    },
+      completionRate: 42,
+      performance: "At Risk",
+      image: "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&q=80"
+    }
   ];
 
-  return (
-    <DashboardLayout
-      role="admin"
-      title="Departments"
-      subtitle="Manage TVET academic structure, assign lecturers, and track departmental analytics."
-    >
-      <div className="space-y-8 pb-20">
-        {/* Controls Header */}
-        <div className="bg-background border border-border/60 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="relative flex-1 max-w-md w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search departments, HODs..."
-              className="pl-10 bg-muted/30 border-border/60 focus-visible:ring-primary/50"
-            />
-          </div>
+  const handleOpenDept = (dept: any) => {
+    setSelectedDept(dept);
+    setView("detail");
+  };
 
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <Button variant="outline" size="sm" className="shrink-0">
-              <SlidersHorizontal className="w-4 h-4 mr-2" /> Filters
-            </Button>
-            <div className="h-8 w-px bg-border/60 mx-1 hidden md:block"></div>
-            <Button className="bg-primary text-primary-foreground shadow-md shadow-primary/20 font-bold">
-              <Plus className="w-4 h-4 mr-2" /> Create Department
-            </Button>
+  if (view === "detail" && selectedDept) {
+    return (
+      <DashboardLayout role="admin" title={selectedDept.name} subtitle={`Department Management • ${selectedDept.id}`}>
+        <div className="space-y-8 pb-20">
+          <Button variant="ghost" onClick={() => setView("grid")} className="font-black gap-2 hover:bg-muted rounded-xl">
+             <ArrowLeft className="w-4 h-4" /> Back to Departments
+          </Button>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+             {/* Left: Dept Info */}
+             <div className="space-y-8">
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                   <div className="w-full h-40 rounded-2xl overflow-hidden mb-6">
+                      <img src={selectedDept.image} className="w-full h-full object-cover" alt="" />
+                   </div>
+                   <div className="space-y-4">
+                      <h2 className="text-2xl font-black">{selectedDept.name}</h2>
+                      <div className="flex items-center gap-3">
+                         <Avatar className="h-10 w-10 border border-border/40">
+                            <AvatarFallback>{selectedDept.head[0]}</AvatarFallback>
+                         </Avatar>
+                         <div>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Head of Dept</p>
+                            <p className="text-sm font-black">{selectedDept.head}</p>
+                         </div>
+                      </div>
+                      <Badge className={`${selectedDept.performance === 'At Risk' ? 'bg-destructive/10 text-destructive' : 'bg-success/10 text-success'} border-none font-black px-4 py-1 rounded-xl uppercase tracking-widest text-[10px]`}>
+                         {selectedDept.performance} Performance
+                      </Badge>
+                   </div>
+
+                   <div className="mt-8 space-y-4 border-t border-border/40 pt-8">
+                      <div className="grid grid-cols-2 gap-4">
+                         <div className="p-4 bg-muted/30 rounded-2xl border border-border/40">
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Students</p>
+                            <p className="text-xl font-black">{selectedDept.students}</p>
+                         </div>
+                         <div className="p-4 bg-muted/30 rounded-2xl border border-border/40">
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Lecturers</p>
+                            <p className="text-xl font-black">{selectedDept.lecturers}</p>
+                         </div>
+                      </div>
+                   </div>
+                </Card>
+
+                <Card className="border-primary/20 bg-primary/5 rounded-[2.5rem] p-8 shadow-xl">
+                   <h4 className="text-lg font-black mb-6">Institutional Goal</h4>
+                   <div className="space-y-4">
+                      <div className="space-y-2">
+                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                            <span>Completion Target</span>
+                            <span className="text-primary">{selectedDept.completionRate}% / 90%</span>
+                         </div>
+                         <Progress value={selectedDept.completionRate} className="h-2" />
+                      </div>
+                      <Button className="w-full rounded-xl font-black bg-primary text-white shadow-lg shadow-primary/20">Allocate Resources</Button>
+                   </div>
+                </Card>
+             </div>
+
+             {/* Right: Dept Details */}
+             <div className="lg:col-span-2 space-y-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                      <h4 className="text-lg font-black mb-6">Top Performing Courses</h4>
+                      <div className="space-y-4">
+                         {[
+                           { title: "Introduction to Networking", learners: 184, avg: 92 },
+                           { title: "Mobile App Development", learners: 142, avg: 85 },
+                           { title: "Cybersecurity Fundamentals", learners: 96, avg: 88 }
+                         ].map((c, i) => (
+                           <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-muted/30 border border-border/40">
+                              <div>
+                                 <p className="font-black text-sm">{c.title}</p>
+                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{c.learners} Active Learners</p>
+                              </div>
+                              <div className="text-right">
+                                 <p className="text-lg font-black text-success">{c.avg}%</p>
+                              </div>
+                           </div>
+                         ))}
+                      </div>
+                   </Card>
+
+                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                      <h4 className="text-lg font-black mb-6">Staffing Overview</h4>
+                      <div className="space-y-4">
+                         {[
+                           { name: "Lecturer James M.", courses: 4, activity: "High" },
+                           { name: "Sarah Wanjiru", courses: 3, activity: "Normal" },
+                           { name: "David K.", courses: 2, activity: "Offline" }
+                         ].map((s, i) => (
+                           <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-border/40">
+                              <Avatar className="h-10 w-10 border border-border/40">
+                                 <AvatarFallback>{s.name[0]}</AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1">
+                                 <p className="font-black text-sm">{s.name}</p>
+                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{s.courses} Active Courses</p>
+                              </div>
+                              <Badge variant="outline" className="rounded-lg text-[9px] font-black uppercase">{s.activity}</Badge>
+                           </div>
+                         ))}
+                      </div>
+                   </Card>
+                </div>
+
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                   <h4 className="text-2xl font-black mb-8">Department Activity Trends</h4>
+                   <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                         <BarChart data={[
+                           { name: 'Mon', active: 120 },
+                           { name: 'Tue', active: 180 },
+                           { name: 'Wed', active: 150 },
+                           { name: 'Thu', active: 220 },
+                           { name: 'Fri', active: 190 }
+                         ]}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                            <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                            <Tooltip 
+                               contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '20px', border: '1px solid hsl(var(--border))', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                            />
+                            <Bar dataKey="active" fill="var(--color-primary)" radius={[10, 10, 0, 0]} />
+                         </BarChart>
+                      </ResponsiveContainer>
+                   </div>
+                </Card>
+             </div>
           </div>
         </div>
+      </DashboardLayout>
+    );
+  }
 
-        <Tabs defaultValue="grid" className="w-full">
-          <div className="flex justify-between items-center mb-6">
-            <TabsList className="bg-muted/50 border border-border/50 p-1">
-              <TabsTrigger
-                value="grid"
-                className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-4"
-              >
-                <Grid className="w-4 h-4 mr-2" /> Card View
-              </TabsTrigger>
-              <TabsTrigger
-                value="list"
-                className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-4"
-              >
-                <List className="w-4 h-4 mr-2" /> Table View
-              </TabsTrigger>
-            </TabsList>
-
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[10px] font-black uppercase tracking-widest"
-              >
-                <FileDown className="w-3 h-3 mr-2" /> Export CSV
+  return (
+    <DashboardLayout role="admin" title="Departments Control" subtitle="Manage institutional departments and faculty operations.">
+      <div className="space-y-8 pb-20">
+        {/* Actions & Search */}
+        <div className="bg-card/40 backdrop-blur-sm border border-border/40 rounded-[2rem] p-6 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+           <div className="relative flex-1 max-w-xl w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search departments or faculty heads..."
+                className="pl-12 h-14 rounded-2xl bg-background/50 border-border/60 focus-visible:ring-primary/50 text-lg font-medium"
+              />
+           </div>
+           <div className="flex gap-3 w-full md:w-auto">
+              <Button variant="outline" className="h-14 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+                 <Building2 className="w-5 h-5 mr-2" /> Assign Lecturer
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[10px] font-black uppercase tracking-widest"
-              >
-                <BarChart3 className="w-3 h-3 mr-2" /> Global Analytics
+              <Button className="h-14 px-8 rounded-2xl font-black bg-primary text-white shadow-lg shadow-primary/20">
+                 <Plus className="w-5 h-5 mr-2" /> Create Department
               </Button>
-            </div>
-          </div>
+           </div>
+        </div>
 
-          <TabsContent value="grid" className="m-0 focus-visible:outline-none">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {departments.map((dept) => (
-                <Card
-                  key={dept.id}
-                  className="group border-border/60 hover:border-primary/40 hover:shadow-soft transition-all duration-300 bg-background overflow-hidden flex flex-col"
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <div
-                        className={`w-12 h-12 rounded-2xl ${dept.bg} ${dept.color} flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-500`}
-                      >
-                        <dept.icon className="w-6 h-6" />
-                      </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                          >
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem>
-                            <Edit className="w-4 h-4 mr-2" /> Edit Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Users className="w-4 h-4 mr-2" /> Assign Lecturers
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <BookOpen className="w-4 h-4 mr-2" /> Add Course
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <BarChart3 className="w-4 h-4 mr-2" /> View Analytics
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Download className="w-4 h-4 mr-2" /> Export Offline Data
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
-                            <Archive className="w-4 h-4 mr-2" /> Archive
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl font-black uppercase tracking-tight">
-                        {dept.name}
-                      </CardTitle>
-                      <CardDescription className="flex items-center gap-1 font-bold text-xs mt-1">
-                        <Briefcase className="w-3 h-3" /> HOD: {dept.head}
-                      </CardDescription>
-                    </div>
-                  </CardHeader>
+        {/* Dept Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {departments.map((dept) => (
+            <Card key={dept.id} className="group overflow-hidden border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] shadow-xl hover:shadow-2xl transition-all duration-500 hover:border-primary/40">
+               <div className="relative h-48 overflow-hidden">
+                  <img src={dept.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute top-6 left-6">
+                     <Badge className="bg-primary/90 text-white border-none font-black px-3 py-1 rounded-lg uppercase tracking-widest text-[10px]">
+                        {dept.id}
+                     </Badge>
+                  </div>
+                  <div className="absolute bottom-6 left-6 right-6">
+                     <h3 className="text-xl font-black text-white leading-tight group-hover:text-primary transition-colors">{dept.name}</h3>
+                  </div>
+               </div>
+               <CardContent className="p-8 space-y-6">
+                  <div className="flex items-center justify-between py-2 border-b border-border/40">
+                     <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8 border border-border/40">
+                           <AvatarFallback>{dept.head[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                           <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1">Head of Dept</p>
+                           <p className="text-xs font-bold">{dept.head}</p>
+                        </div>
+                     </div>
+                     <Badge className={`${dept.performance === 'At Risk' ? 'bg-destructive/10 text-destructive' : 'bg-success/10 text-success'} border-none font-black text-[9px] uppercase`}>
+                        {dept.performance}
+                     </Badge>
+                  </div>
 
-                  <CardContent className="space-y-6 flex-1">
-                    {/* Metrics Grid */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          Students
-                        </p>
-                        <p className="text-lg font-black flex items-center gap-2">
-                          <GraduationCap className="w-4 h-4 text-primary" /> {dept.students}
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          Lecturers
-                        </p>
-                        <p className="text-lg font-black flex items-center gap-2">
-                          <Users className="w-4 h-4 text-accent" /> {dept.lecturers}
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          Courses
-                        </p>
-                        <p className="text-lg font-black flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-emerald-500" /> {dept.courses}
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          Offline Activity
-                        </p>
-                        <p className="text-lg font-black flex items-center gap-2">
-                          <WifiOff className="w-4 h-4 text-amber-500" /> {dept.offlineActivity}%
-                        </p>
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-3 gap-2">
+                     <div className="text-center">
+                        <p className="text-xl font-black">{dept.students}</p>
+                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Students</p>
+                     </div>
+                     <div className="text-center border-x border-border/40">
+                        <p className="text-xl font-black">{dept.lecturers}</p>
+                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Lecturers</p>
+                     </div>
+                     <div className="text-center">
+                        <p className="text-xl font-black">{dept.courses}</p>
+                        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Courses</p>
+                     </div>
+                  </div>
 
-                    {/* Progress Indicator */}
-                    <div className="space-y-2 pt-2">
-                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                        <span className="text-muted-foreground">Term Completion</span>
+                  <div className="space-y-2">
+                     <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                        <span>Completion Rate</span>
                         <span className="text-primary">{dept.completionRate}%</span>
-                      </div>
-                      <Progress
-                        value={dept.completionRate}
-                        className="h-1.5 bg-muted"
-                        indicatorClassName="bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)]"
-                      />
-                    </div>
-                  </CardContent>
-
-                  <CardFooter className="p-4 pt-0 gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1 text-[10px] font-black uppercase tracking-widest h-9 border-border/60 hover:bg-muted"
-                    >
-                      View Depth
-                    </Button>
-                    <Button className="flex-1 text-[10px] font-black uppercase tracking-widest h-9 bg-primary/10 text-primary border-0 hover:bg-primary/20 shadow-none">
-                      Dept. Analytics
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-
-              {/* Add New Department Card */}
-              <Card className="border-dashed border-2 border-border/60 bg-muted/5 hover:bg-muted/10 transition-colors flex flex-col items-center justify-center p-12 text-center space-y-4 group cursor-pointer">
-                <div className="w-16 h-16 rounded-full bg-background border border-border/60 flex items-center justify-center text-muted-foreground group-hover:scale-110 group-hover:text-primary transition-all duration-300">
-                  <Plus className="w-8 h-8" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="font-bold text-lg">Create Department</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Add a new academic unit to the institution structure.
-                  </p>
-                </div>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="list" className="m-0 focus-visible:outline-none">
-            <Card className="border-border/60 shadow-soft overflow-hidden">
-              <CardContent className="p-0">
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader className="bg-muted/30">
-                      <TableRow className="hover:bg-transparent border-b border-border/50">
-                        <TableHead className="w-20 text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          ID
-                        </TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Department
-                        </TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Head of Dept
-                        </TableHead>
-                        <TableHead className="text-center text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Lecturers
-                        </TableHead>
-                        <TableHead className="text-center text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Students
-                        </TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Completion
-                        </TableHead>
-                        <TableHead className="text-right text-[10px] font-black uppercase tracking-widest px-6 py-4">
-                          Actions
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {departments.map((dept) => (
-                        <TableRow
-                          key={dept.id}
-                          className="group border-b border-border/40 hover:bg-muted/10 transition-colors"
-                        >
-                          <TableCell className="px-6 py-4 font-bold text-muted-foreground">
-                            {dept.id}
-                          </TableCell>
-                          <TableCell className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${dept.bg} ${dept.color}`}>
-                                <dept.icon className="w-4 h-4" />
-                              </div>
-                              <span className="font-black uppercase tracking-tight">
-                                {dept.name}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="px-6 py-4 font-medium">{dept.head}</TableCell>
-                          <TableCell className="px-6 py-4 text-center">
-                            <Badge variant="secondary" className="font-bold">
-                              {dept.lecturers}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="px-6 py-4 text-center font-bold text-primary">
-                            {dept.students}
-                          </TableCell>
-                          <TableCell className="px-6 py-4">
-                            <div className="flex items-center gap-3 w-32">
-                              <Progress
-                                value={dept.completionRate}
-                                className="h-1 bg-muted flex-1"
-                                indicatorClassName="bg-emerald-500"
-                              />
-                              <span className="text-[10px] font-bold">{dept.completionRate}%</span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="px-6 py-4 text-right">
-                            <div className="flex justify-end gap-1">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 text-muted-foreground hover:text-primary"
-                              >
-                                <Edit className="w-3.5 h-3.5" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 text-muted-foreground hover:text-accent"
-                              >
-                                <BarChart3 className="w-3.5 h-3.5" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
+                     </div>
+                     <Progress value={dept.completionRate} className="h-2" />
+                  </div>
+               </CardContent>
+               <CardFooter className="px-8 pb-8 pt-0 gap-3">
+                  <Button className="flex-1 rounded-2xl h-12 font-black shadow-lg shadow-primary/20" onClick={() => handleOpenDept(dept)}>View Details</Button>
+                  <Button variant="outline" className="rounded-2xl h-12 w-12 p-0 border-border/60 hover:bg-muted">
+                     <BarChart3 className="w-5 h-5" />
+                  </Button>
+               </CardFooter>
             </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Global Structural Metrics */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card className="border-border/60 bg-primary/5">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-primary" /> Institution Health
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black">92.4%</div>
-              <p className="text-xs text-muted-foreground font-medium mt-1">
-                Weighted performance across 5 departments.
-              </p>
-              <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-primary w-[92%] shadow-[0_0_10px_rgba(var(--primary),0.5)]"></div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border/60 bg-accent/5">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-accent-foreground">
-                <WifiOff className="w-4 h-4" /> Offline Resiliency
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black">84.8%</div>
-              <p className="text-xs text-muted-foreground font-medium mt-1">
-                Curriculum accessibility in low-connectivity areas.
-              </p>
-              <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-accent w-[84%] shadow-[0_0_10px_rgba(var(--accent),0.5)]"></div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border/60">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-                <Activity className="w-4 h-4 text-emerald-500" /> Resource Efficiency
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black">12:1</div>
-              <p className="text-xs text-muted-foreground font-medium mt-1">
-                Average student-to-lecturer ratio institution-wide.
-              </p>
-              <div className="mt-4 flex items-center gap-1.5">
-                <Badge
-                  variant="outline"
-                  className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[9px] font-bold"
-                >
-                  OPTIMAL
-                </Badge>
-                <Badge variant="outline" className="text-[9px] font-bold">
-                  TARGET: 15:1
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
+          ))}
         </div>
       </div>
     </DashboardLayout>

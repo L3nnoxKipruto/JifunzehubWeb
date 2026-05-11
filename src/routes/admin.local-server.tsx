@@ -6,411 +6,285 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   Server,
-  Wifi,
-  Play,
-  Square,
-  Activity,
-  Database,
-  CloudOff,
-  RefreshCw,
+  Zap,
   HardDrive,
   Cpu,
-  Zap,
+  Activity,
+  RefreshCw,
+  Wifi,
   WifiOff,
-  Globe,
-  Lock,
+  Database,
   ShieldCheck,
-  Terminal,
-  History,
-  Settings,
-  ExternalLink,
-  AlertTriangle,
-  Network,
-  Monitor,
-  Usb,
-  Package,
   Search,
-  Users,
-  CheckCircle2,
+  Trash2,
+  DownloadCloud,
+  FileUp,
+  AlertTriangle,
+  Clock,
+  Terminal,
+  Settings,
+  MoreVertical,
+  Usb,
+  Router,
 } from "lucide-react";
 import {
-  Area,
-  AreaChart,
-  CartesianGrid,
   ResponsiveContainer,
-  Tooltip,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
-  Line,
-  LineChart,
+  CartesianGrid,
+  Tooltip,
+  BarChart,
+  Bar,
 } from "recharts";
 
 export const Route = createFileRoute("/admin/local-server")({
-  head: () => ({ meta: [{ title: "Server Control Center — JifunzeHub" }] }),
-  component: LocalServerComponent,
+  component: AdminLocalServerComponent,
 });
 
-const performanceData = [
-  { time: "09:00", cpu: 12, ram: 45, network: 240 },
-  { time: "10:00", cpu: 34, ram: 52, network: 450 },
-  { time: "11:00", cpu: 67, ram: 65, network: 890 },
-  { time: "12:00", cpu: 42, ram: 58, network: 600 },
-  { time: "13:00", cpu: 28, ram: 50, network: 340 },
-  { time: "14:00", cpu: 55, ram: 72, network: 780 },
-  { time: "15:00", cpu: 45, ram: 68, network: 520 },
+const bandwidthData = [
+  { time: "08:00", upload: 45, download: 120 },
+  { time: "10:00", upload: 85, download: 340 },
+  { time: "12:00", upload: 120, download: 560 },
+  { time: "14:00", upload: 90, download: 420 },
+  { time: "16:00", upload: 140, download: 780 },
+  { time: "18:00", upload: 60, download: 230 },
+  { time: "20:00", upload: 30, download: 110 },
 ];
 
-function LocalServerComponent() {
+function AdminLocalServerComponent() {
   return (
-    <DashboardLayout
-      role="admin"
-      title="Infrastructure Control"
-      subtitle="Institutional mission control for the campus local server, offline sync engine, and content delivery network."
-    >
+    <DashboardLayout role="admin" title="Local Infrastructure Hub" subtitle="Manage campus-wide offline distribution nodes and synchronization services.">
       <div className="space-y-8 pb-20">
-        {/* Status Area */}
-        <div className="grid gap-4 md:grid-cols-4">
-          <StatusCard label="Server Status" value="Online" status="Success" icon={Server} />
-          <StatusCard label="Active Users" value="184" status="High Load" icon={Users} warning />
-          <StatusCard label="Bandwidth" value="1.2 Gbps" status="Optimal" icon={Zap} />
-          <StatusCard label="Storage" value="2.4 TB" status="45% Used" icon={HardDrive} />
-        </div>
-
-        {/* Core Actions Bar */}
-        <div className="bg-background border border-border/60 rounded-2xl p-4 shadow-sm flex flex-wrap gap-2 items-center justify-between">
-          <div className="flex flex-wrap gap-2">
-            <Button
-              size="sm"
-              className="bg-primary text-primary-foreground font-black uppercase tracking-widest px-4"
-            >
-              <RefreshCw className="w-3 h-3 mr-2" /> Refresh Engine
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-[10px] font-black uppercase tracking-widest px-4 border-border/60"
-            >
-              <Database className="w-3 h-3 mr-2 text-accent" /> Run Backup
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-[10px] font-black uppercase tracking-widest px-4 border-border/60"
-            >
-              <Usb className="w-3 h-3 mr-2" /> USB Export
-            </Button>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-[10px] font-black uppercase tracking-widest px-4 border-border/60 text-destructive hover:bg-destructive/10"
-            >
-              <Square className="w-3 h-3 mr-2" /> Stop Node
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-[10px] font-black uppercase tracking-widest px-4 border-border/60 bg-muted/50"
-            >
-              <Terminal className="w-3 h-3 mr-2" /> SSH Console
-            </Button>
-          </div>
+        {/* Core Server Metrics */}
+        <div className="grid lg:grid-cols-4 gap-6">
+           {[
+             { label: "Server Health", value: "99.9%", status: "Optimal", icon: ShieldCheck, color: "text-success", bg: "bg-success/10" },
+             { label: "Active Nodes", value: "12 Hubs", status: "All Online", icon: Router, color: "text-primary", bg: "bg-primary/10" },
+             { label: "Daily Syncs", value: "1,420", status: "+12% Growth", icon: RefreshCw, color: "text-amber-500", bg: "bg-amber-500/10" },
+             { label: "Storage Used", value: "1.2 / 4 TB", status: "30% Capacity", icon: HardDrive, color: "text-blue-500", bg: "bg-blue-500/10" },
+           ].map((stat, i) => (
+             <Card key={i} className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] p-6 shadow-xl border-l-4 border-l-primary">
+                <div className="flex items-center gap-4">
+                   <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color}`}>
+                      <stat.icon className="w-6 h-6" />
+                   </div>
+                   <div>
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{stat.label}</p>
+                      <h3 className="text-xl font-black">{stat.value}</h3>
+                      <p className={`text-[10px] font-bold ${stat.color} uppercase tracking-widest`}>{stat.status}</p>
+                   </div>
+                </div>
+             </Card>
+           ))}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Live Monitoring Column */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Performance Visualization */}
-            <Card className="border-border/60 shadow-elegant overflow-hidden">
-              <CardHeader className="bg-muted/30 border-b border-border/50 flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-primary" /> Live Performance Monitor
-                  </CardTitle>
-                </div>
-                <div className="flex gap-2">
-                  <Badge variant="outline" className="bg-background text-[10px] font-bold">
-                    REAL-TIME
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="h-64 pt-6">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={performanceData}>
-                    <defs>
-                      <linearGradient id="colorCPU" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="rgba(255,255,255,0.05)"
-                    />
-                    <XAxis
-                      dataKey="time"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 10 }}
-                    />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--background))",
-                        borderRadius: "8px",
-                        border: "1px solid hsl(var(--border))",
-                      }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="cpu"
-                      stroke="var(--color-primary)"
-                      fillOpacity={1}
-                      fill="url(#colorCPU)"
-                      strokeWidth={2}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="ram"
-                      stroke="var(--color-accent)"
-                      fillOpacity={0}
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-              <CardFooter className="bg-muted/10 border-t border-border/50 py-3 grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                    CPU Load
-                  </p>
-                  <p className="text-sm font-black">45.2%</p>
-                </div>
-                <div className="text-center border-x border-border/50">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                    Memory (RAM)
-                  </p>
-                  <p className="text-sm font-black text-accent">12.8 GB / 16 GB</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                    Temp
-                  </p>
-                  <p className="text-sm font-black text-emerald-500">42°C</p>
-                </div>
-              </CardFooter>
-            </Card>
+           {/* Bandwidth & Load Analytics */}
+           <div className="lg:col-span-2 space-y-8">
+              <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                 <div className="flex justify-between items-center mb-8">
+                    <div>
+                       <h3 className="text-2xl font-black">Local Traffic Distribution</h3>
+                       <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Network throughput across campus hotspot nodes</p>
+                    </div>
+                    <div className="flex gap-4">
+                       <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-primary"></div>
+                          <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Download (Mbps)</span>
+                       </div>
+                       <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                          <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Upload (Mbps)</span>
+                       </div>
+                    </div>
+                 </div>
+                 
+                 <div className="h-[350px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                       <AreaChart data={bandwidthData}>
+                          <defs>
+                             <linearGradient id="colorDL" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                             </linearGradient>
+                             <linearGradient id="colorUL" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                             </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                          <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                          <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                          <Tooltip 
+                             contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '20px', border: '1px solid hsl(var(--border))', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                          />
+                          <Area type="monotone" dataKey="download" stroke="var(--color-primary)" fillOpacity={1} fill="url(#colorDL)" strokeWidth={4} />
+                          <Area type="monotone" dataKey="upload" stroke="#10b981" fillOpacity={1} fill="url(#colorUL)" strokeWidth={4} />
+                       </AreaChart>
+                    </ResponsiveContainer>
+                 </div>
+              </Card>
 
-            {/* Sync Jobs & Logs */}
-            <Card className="border-border/60 shadow-elegant">
-              <CardHeader className="pb-4 border-b border-border/40">
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-sm font-black uppercase tracking-widest">
-                    Active Sync Pipelines
-                  </CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-[10px] font-black uppercase tracking-widest"
-                  >
-                    <History className="w-3 h-3 mr-2" /> View All Logs
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="divide-y divide-border/50">
-                  <SyncLogItem
-                    label="Main Campus Hub &gt; Cloud"
-                    status="Syncing"
-                    progress={68}
-                    details="Uploading 428 MB of student submissions..."
-                    icon={RefreshCw}
-                    active
-                  />
-                  <SyncLogItem
-                    label="Library LAN &gt; Main Hub"
-                    status="Completed"
-                    progress={100}
-                    details="Successfully mirrored 12 new course modules."
-                    icon={CheckCircle2}
-                  />
-                  <SyncLogItem
-                    label="Backup Schedule &gt; External Drive"
-                    status="Failed"
-                    progress={12}
-                    details="Write error detected on USB-DRIVE-C."
-                    icon={AlertTriangle}
-                    warning
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              {/* Node Monitoring */}
+              <div className="grid md:grid-cols-2 gap-8">
+                 <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                    <h4 className="text-lg font-black mb-6 flex items-center gap-2">
+                       <Router className="w-5 h-5 text-primary" /> Active Hub Nodes
+                    </h4>
+                    <div className="space-y-4">
+                       {[
+                         { name: "Main ICT Lab", status: "Peak", load: 92, users: 45 },
+                         { name: "Engineering Block A", status: "Normal", load: 45, users: 22 },
+                         { name: "Hospitality Hub", status: "Idle", load: 12, users: 5 }
+                       ].map((hub, i) => (
+                         <div key={i} className="p-4 bg-muted/30 rounded-2xl border border-border/40 space-y-3">
+                            <div className="flex justify-between items-center">
+                               <p className="font-black text-sm">{hub.name}</p>
+                               <Badge className={`${hub.status === 'Peak' ? 'bg-amber-500' : 'bg-success'} text-white border-none text-[9px] font-black uppercase`}>{hub.status}</Badge>
+                            </div>
+                            <div className="space-y-1">
+                               <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                                  <span>Node Load</span>
+                                  <span>{hub.load}%</span>
+                               </div>
+                               <Progress value={hub.load} className="h-1.5" />
+                            </div>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{hub.users} Connected Devices</p>
+                         </div>
+                       ))}
+                    </div>
+                 </Card>
 
-          {/* Sidebar Infrastructure Details */}
-          <div className="space-y-6">
-            {/* Hotspot & Network Control */}
-            <Card className="border-border/60 bg-muted/5">
-              <CardHeader className="pb-3 border-b border-border/40">
-                <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-                  <Wifi className="w-4 h-4 text-primary" /> Campus Hotspot
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold">Network Name (SSID)</span>
-                  <Badge variant="outline" className="font-black">
-                    JIFUNZE_HUB_MAIN
-                  </Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold">Active Clients</span>
-                  <span className="text-sm font-black">156 Devices</span>
-                </div>
-                <div className="space-y-1.5 pt-2">
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                    <span className="text-muted-foreground">Range Signal</span>
-                    <span className="text-success">Excellent</span>
-                  </div>
-                  <Progress value={92} className="h-1 bg-muted" indicatorClassName="bg-success" />
-                </div>
-                <Button
-                  variant="outline"
-                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest border-border/60"
-                >
-                  Manage Access Points
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Local Content Distribution */}
-            <Card className="border-border/60">
-              <CardHeader className="pb-3 border-b border-border/40">
-                <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-                  <Package className="w-4 h-4 text-accent" /> Local Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 space-y-4">
-                <div className="flex flex-col gap-3">
-                  <DistItem label="Core Curriculum" size="1.2 TB" count="42 Courses" />
-                  <DistItem label="Student Repos" size="420 GB" count="1,248 Repos" />
-                  <DistItem label="Staff Cache" size="84 GB" count="45 Folders" />
-                </div>
-                <Button
-                  variant="ghost"
-                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest border border-border/50 mt-2"
-                >
-                  Browse Local File System
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Server Terminal Mini */}
-            <Card className="bg-slate-950 text-slate-50 border-none shadow-xl font-mono overflow-hidden">
-              <div className="bg-slate-900 px-3 py-1.5 flex items-center justify-between border-b border-slate-800">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50"></div>
-                </div>
-                <span className="text-[9px] font-black uppercase opacity-50">
-                  jifunze-hub-os ~ console
-                </span>
+                 <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                    <h4 className="text-lg font-black mb-6 flex items-center gap-2">
+                       <RefreshCw className="w-5 h-5 text-amber-500" /> Sync Infrastructure
+                    </h4>
+                    <div className="space-y-4">
+                       <div className="bg-primary/5 p-4 rounded-2xl border border-primary/20 space-y-2">
+                          <p className="text-[10px] font-black text-primary uppercase tracking-widest">Active Institution Sync</p>
+                          <div className="flex justify-between items-center">
+                             <p className="text-sm font-black">Central DB → Local Hubs</p>
+                             <span className="text-xs font-black text-primary">68%</span>
+                          </div>
+                          <Progress value={68} className="h-1.5" />
+                       </div>
+                       
+                       <div className="space-y-3 pt-2">
+                          {[
+                            { title: "Course Content Cache", status: "Synced", icon: Database },
+                            { title: "Student Assessment Queue", status: "3 Pending", icon: FileUp, alert: true },
+                            { title: "System Logs Pipeline", status: "Live", icon: Terminal }
+                          ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-border/40">
+                               <item.icon className={`w-4 h-4 ${item.alert ? 'text-amber-500' : 'text-muted-foreground'}`} />
+                               <span className="text-xs font-bold flex-1">{item.title}</span>
+                               <span className={`text-[9px] font-black uppercase ${item.alert ? 'text-amber-500' : 'text-success'}`}>{item.status}</span>
+                            </div>
+                          ))}
+                       </div>
+                       <Button className="w-full mt-2 rounded-xl font-black bg-amber-500 text-white shadow-lg">Retry All Failed Syncs</Button>
+                    </div>
+                 </Card>
               </div>
-              <CardContent className="p-3 text-[10px] space-y-1">
-                <p className="text-emerald-400">$ jifunze-sync --status</p>
-                <p className="opacity-70">Node: MAIN_CAMPUS_HUB_01</p>
-                <p className="opacity-70">Mode: OFFLINE_RESILIENT</p>
-                <p className="opacity-70">Sync Engine: v4.2.1-stable</p>
-                <p className="text-emerald-400">$ uptime</p>
-                <p className="opacity-70">up 14 days, 12:45, 184 users</p>
-                <div className="animate-pulse inline-block h-3 w-1.5 bg-slate-50 ml-1 translate-y-0.5"></div>
-              </CardContent>
-            </Card>
-          </div>
+           </div>
+
+           {/* Hardware & System Logs */}
+           <div className="space-y-8">
+              {/* Hardware Performance */}
+              <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
+                 <h4 className="text-lg font-black mb-6 flex items-center gap-2">
+                    <Cpu className="w-5 h-5 text-primary" /> Hardware Vitality
+                 </h4>
+                 <div className="space-y-6">
+                    <div className="space-y-2">
+                       <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                          <span>CPU Usage</span>
+                          <span>24%</span>
+                       </div>
+                       <Progress value={24} className="h-2" />
+                    </div>
+                    <div className="space-y-2">
+                       <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                          <span>Memory (RAM)</span>
+                          <span>4.8 / 32 GB</span>
+                       </div>
+                       <Progress value={15} className="h-2" />
+                    </div>
+                    <div className="space-y-2">
+                       <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                          <span>NVMe SSD Storage</span>
+                          <span>1.2 / 4 TB</span>
+                       </div>
+                       <Progress value={30} className="h-2" />
+                    </div>
+                    <div className="flex justify-between pt-4 border-t border-border/40">
+                       <div className="text-center">
+                          <p className="text-xl font-black">38°C</p>
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Temp</p>
+                       </div>
+                       <div className="text-center">
+                          <p className="text-xl font-black">2.4 GHz</p>
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Clock</p>
+                       </div>
+                       <div className="text-center">
+                          <p className="text-xl font-black">1.2W</p>
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Power</p>
+                       </div>
+                    </div>
+                 </div>
+              </Card>
+
+              {/* Quick Server Controls */}
+              <Card className="border-primary/20 bg-primary/5 rounded-[2.5rem] p-8 shadow-xl">
+                 <h4 className="text-lg font-black mb-6">Server Controls</h4>
+                 <div className="grid grid-cols-2 gap-3">
+                    <Button variant="outline" className="h-24 flex-col gap-2 rounded-2xl border-border/60 font-black text-xs">
+                       <RefreshCw className="w-6 h-6 text-primary" /> Restart Hub
+                    </Button>
+                    <Button variant="outline" className="h-24 flex-col gap-2 rounded-2xl border-border/60 font-black text-xs">
+                       <Database className="w-6 h-6 text-amber-500" /> Full Backup
+                    </Button>
+                    <Button variant="outline" className="h-24 flex-col gap-2 rounded-2xl border-border/60 font-black text-xs">
+                       <Settings className="w-6 h-6 text-blue-500" /> Config Hub
+                    </Button>
+                    <Button variant="outline" className="h-24 flex-col gap-2 rounded-2xl border-border/60 font-black text-xs">
+                       <Usb className="w-6 h-6 text-emerald-500" /> USB Export
+                    </Button>
+                 </div>
+              </Card>
+
+              {/* System Logs Terminal */}
+              <Card className="border-border/40 bg-zinc-950 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                 <div className="p-4 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                       <Terminal className="w-4 h-4 text-emerald-500" />
+                       <span className="text-[10px] font-black uppercase text-zinc-400 tracking-widest">System Kernel Logs</span>
+                    </div>
+                    <div className="flex gap-1.5">
+                       <div className="w-2.5 h-2.5 rounded-full bg-zinc-800"></div>
+                       <div className="w-2.5 h-2.5 rounded-full bg-zinc-800"></div>
+                       <div className="w-2.5 h-2.5 rounded-full bg-zinc-800"></div>
+                    </div>
+                 </div>
+                 <div className="p-6 font-mono text-[10px] space-y-2 text-emerald-500/80">
+                    <p><span className="text-zinc-600">[21:04:12]</span> INFO: Sync engine initialized on node HUB-MAIN-01</p>
+                    <p><span className="text-zinc-600">[21:05:01]</span> AUTH: Device SAMSUNG-TAB-02 verified via local token</p>
+                    <p><span className="text-amber-500/80">[21:05:45]</span> WARN: Storage usage on Library node exceeds 90%</p>
+                    <p><span className="text-zinc-600">[21:06:12]</span> INFO: Pushing course content package #CRS-102 to all hubs</p>
+                    <div className="h-4 w-2 bg-emerald-500/50 animate-pulse mt-2"></div>
+                 </div>
+              </Card>
+           </div>
         </div>
       </div>
     </DashboardLayout>
-  );
-}
-
-function StatusCard({ label, value, status, icon: Icon, warning }: any) {
-  return (
-    <Card className="border-border/60 hover:shadow-soft transition-all group overflow-hidden">
-      <div
-        className={`absolute left-0 top-0 bottom-0 w-1 ${warning ? "bg-amber-500" : "bg-primary"}`}
-      ></div>
-      <CardContent className="p-5 flex items-center gap-4">
-        <div
-          className={`p-3 rounded-xl ${warning ? "bg-amber-500/10 text-amber-600" : "bg-primary/10 text-primary"}`}
-        >
-          <Icon className="w-5 h-5" />
-        </div>
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground leading-none mb-1">
-            {label}
-          </p>
-          <p className="text-xl font-black">{value}</p>
-          <p
-            className={`text-[9px] font-bold mt-1 uppercase ${warning ? "text-amber-600" : "text-success"}`}
-          >
-            {status}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function SyncLogItem({ label, status, progress, details, icon: Icon, active, warning }: any) {
-  return (
-    <div className="p-4 space-y-3">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div
-            className={`p-2 rounded-lg ${active ? "bg-primary/10 text-primary animate-pulse" : warning ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"}`}
-          >
-            <Icon className="w-4 h-4" />
-          </div>
-          <div>
-            <p className="text-sm font-black uppercase tracking-tight">{label}</p>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase">{status}</p>
-          </div>
-        </div>
-        <span className="text-xs font-black">{progress}%</span>
-      </div>
-      <div className="space-y-1.5">
-        <Progress
-          value={progress}
-          className="h-1 bg-muted"
-          indicatorClassName={warning ? "bg-destructive" : active ? "bg-primary" : "bg-success"}
-        />
-        <p className="text-[10px] text-muted-foreground italic">{details}</p>
-      </div>
-    </div>
-  );
-}
-
-function DistItem({ label, size, count }: any) {
-  return (
-    <div className="flex justify-between items-center p-3 rounded-xl bg-background border border-border/50">
-      <div>
-        <p className="text-xs font-black uppercase tracking-tight">{label}</p>
-        <p className="text-[10px] text-muted-foreground font-bold">{count}</p>
-      </div>
-      <Badge variant="outline" className="bg-muted text-[10px] font-bold">
-        {size}
-      </Badge>
-    </div>
   );
 }
