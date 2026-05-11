@@ -25,6 +25,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LecturerIndexRouteImport } from './routes/lecturer.index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as LecturerSyncRouteImport } from './routes/lecturer.sync'
 import { Route as LecturerLearnersRouteImport } from './routes/lecturer.learners'
 import { Route as LecturerCoursesRouteImport } from './routes/lecturer.courses'
@@ -128,6 +131,21 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LecturerIndexRoute = LecturerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LecturerRoute,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const LecturerSyncRoute = LecturerSyncRouteImport.update({
   id: '/sync',
@@ -285,18 +303,18 @@ export interface FileRoutesByFullPath {
   '/lecturer/courses': typeof LecturerCoursesRoute
   '/lecturer/learners': typeof LecturerLearnersRoute
   '/lecturer/sync': typeof LecturerSyncRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/lecturer/': typeof LecturerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
-  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/device-setup': typeof DeviceSetupRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/help': typeof HelpRoute
-  '/lecturer': typeof LecturerRouteWithChildren
   '/login': typeof LoginRoute
   '/offline-error': typeof OfflineErrorRoute
   '/onboarding': typeof OnboardingRoute
@@ -326,6 +344,9 @@ export interface FileRoutesByTo {
   '/lecturer/courses': typeof LecturerCoursesRoute
   '/lecturer/learners': typeof LecturerLearnersRoute
   '/lecturer/sync': typeof LecturerSyncRoute
+  '/admin': typeof AdminIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/lecturer': typeof LecturerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -368,6 +389,9 @@ export interface FileRoutesById {
   '/lecturer/courses': typeof LecturerCoursesRoute
   '/lecturer/learners': typeof LecturerLearnersRoute
   '/lecturer/sync': typeof LecturerSyncRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/lecturer/': typeof LecturerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -411,18 +435,18 @@ export interface FileRouteTypes {
     | '/lecturer/courses'
     | '/lecturer/learners'
     | '/lecturer/sync'
+    | '/admin/'
+    | '/dashboard/'
+    | '/lecturer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/accessibility'
-    | '/admin'
     | '/contact'
-    | '/dashboard'
     | '/device-setup'
     | '/forgot-password'
     | '/help'
-    | '/lecturer'
     | '/login'
     | '/offline-error'
     | '/onboarding'
@@ -452,6 +476,9 @@ export interface FileRouteTypes {
     | '/lecturer/courses'
     | '/lecturer/learners'
     | '/lecturer/sync'
+    | '/admin'
+    | '/dashboard'
+    | '/lecturer'
   id:
     | '__root__'
     | '/'
@@ -493,6 +520,9 @@ export interface FileRouteTypes {
     | '/lecturer/courses'
     | '/lecturer/learners'
     | '/lecturer/sync'
+    | '/admin/'
+    | '/dashboard/'
+    | '/lecturer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -628,6 +658,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/lecturer/': {
+      id: '/lecturer/'
+      path: '/'
+      fullPath: '/lecturer/'
+      preLoaderRoute: typeof LecturerIndexRouteImport
+      parentRoute: typeof LecturerRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/lecturer/sync': {
       id: '/lecturer/sync'
@@ -801,6 +852,7 @@ interface AdminRouteChildren {
   AdminLecturersRoute: typeof AdminLecturersRoute
   AdminLocalServerRoute: typeof AdminLocalServerRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -811,6 +863,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLecturersRoute: AdminLecturersRoute,
   AdminLocalServerRoute: AdminLocalServerRoute,
   AdminStudentsRoute: AdminStudentsRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -826,6 +879,7 @@ interface DashboardRouteChildren {
   DashboardPlayerRoute: typeof DashboardPlayerRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardSyncRoute: typeof DashboardSyncRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -839,6 +893,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardPlayerRoute: DashboardPlayerRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardSyncRoute: DashboardSyncRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -851,6 +906,7 @@ interface LecturerRouteChildren {
   LecturerCoursesRoute: typeof LecturerCoursesRoute
   LecturerLearnersRoute: typeof LecturerLearnersRoute
   LecturerSyncRoute: typeof LecturerSyncRoute
+  LecturerIndexRoute: typeof LecturerIndexRoute
 }
 
 const LecturerRouteChildren: LecturerRouteChildren = {
@@ -859,6 +915,7 @@ const LecturerRouteChildren: LecturerRouteChildren = {
   LecturerCoursesRoute: LecturerCoursesRoute,
   LecturerLearnersRoute: LecturerLearnersRoute,
   LecturerSyncRoute: LecturerSyncRoute,
+  LecturerIndexRoute: LecturerIndexRoute,
 }
 
 const LecturerRouteWithChildren = LecturerRoute._addFileChildren(

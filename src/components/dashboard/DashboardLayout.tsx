@@ -162,49 +162,24 @@ export function DashboardLayout({
           </Button>
         </div>
 
-        {/* User Profile Area with Sync Health Badge for Admin */}
-        <div className="px-5 pt-6 pb-2">
-          <div className="flex items-center gap-3">
-            <div className="relative group cursor-pointer">
-              <Avatar className="h-10 w-10 border-2 border-accent transition-transform group-hover:scale-105">
-                <AvatarFallback className="bg-primary text-primary-foreground font-bold">
+        {/* User Profile Area */}
+        <div className="px-6 pt-8 pb-4">
+          <div className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-white/10 shadow-lg group cursor-pointer transition-all hover:bg-white/10">
+            <div className="relative">
+              <Avatar className="h-12 w-12 border-2 border-primary/20 transition-transform group-hover:scale-105">
+                <AvatarFallback className="bg-primary text-primary-foreground font-black text-lg">
                   {userProfile.initials}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-sidebar bg-success"></div>
-              {role === "admin" && (
-                <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full border-2 border-sidebar bg-accent flex items-center justify-center">
-                  <ShieldCheck className="w-2.5 h-2.5 text-accent-foreground" />
-                </div>
-              )}
+              <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-sidebar bg-success shadow-sm"></div>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold leading-none truncate">{userProfile.name}</p>
-              <p className="text-[10px] text-sidebar-foreground/60 mt-1 uppercase tracking-wider font-bold truncate">
-                {role === "admin"
-                  ? "Kisumu Polytechnic"
-                  : `${titleMap[role]} • ${userProfile.dept}`}
+              <p className="font-black text-sm truncate leading-tight">{userProfile.name}</p>
+              <p className="text-[10px] text-sidebar-foreground/50 mt-1 uppercase tracking-widest font-bold truncate">
+                {role === "student" ? "Student • ICT Dept" : role === "lecturer" ? "Lecturer • Engineering" : "Administrator"}
               </p>
             </div>
-            {role === "admin" && (
-              <ChevronDown className="h-3 w-3 text-sidebar-foreground/40 shrink-0" />
-            )}
           </div>
-
-          {role === "admin" && (
-            <div className="mt-4 flex items-center gap-2 px-1">
-              <Badge
-                variant="outline"
-                className="bg-sidebar-accent/30 text-[9px] font-bold py-0 h-5 border-sidebar-border/50 text-sidebar-foreground/70 w-full justify-between"
-              >
-                System Health:{" "}
-                <span className="text-success font-black uppercase tracking-widest ml-1">
-                  Optimal
-                </span>
-                <Activity className="w-3 h-3 text-success ml-1" />
-              </Badge>
-            </div>
-          )}
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
@@ -306,53 +281,33 @@ export function DashboardLayout({
         )}
 
         {/* Offline Panel / Bottom Status */}
-        <div className="mt-auto border-t border-sidebar-border bg-sidebar-accent/10 p-4 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="relative flex h-2.5 w-2.5 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex h-full w-full rounded-full bg-amber-500"></span>
+        <div className="mt-auto m-4 rounded-[2rem] bg-amber-500/10 border border-amber-500/20 p-5 backdrop-blur-md overflow-hidden relative group">
+           <div className="absolute -top-4 -right-4 opacity-5 transition-transform group-hover:rotate-12">
+              <WifiOff className="w-20 h-20" />
+           </div>
+           <div className="relative z-10 space-y-4">
+              <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-2">
+                    <div className="relative flex h-2 w-2">
+                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                       <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                    </div>
+                    <span className="text-xs font-black text-amber-600 uppercase tracking-widest">Working Offline</span>
+                 </div>
+                 <Badge variant="outline" className="h-5 px-1.5 border-amber-500/30 text-[9px] font-black text-amber-700 bg-amber-500/5">LOCAL</Badge>
               </div>
-              <span className="text-sm font-semibold text-amber-500">Working Offline</span>
-            </div>
-            <WifiOff className="h-4 w-4 text-amber-500/50" />
-          </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between text-[10px] uppercase font-bold tracking-wider text-sidebar-foreground/70">
-              <span>Sync Progress</span>
-              <span className="text-sidebar-foreground">3 Items</span>
-            </div>
-            <Progress
-              value={33}
-              className="h-1.5 bg-sidebar-border"
-              indicatorClassName="bg-amber-500"
-            />
-
-            {role === "admin" && (
-              <div className="flex justify-between items-center mt-3 pt-2 border-t border-sidebar-border/30">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
-                  <span className="text-[10px] font-bold text-sidebar-foreground/50 uppercase tracking-widest">
-                    18 Devices Connected
-                  </span>
-                </div>
+              <div className="space-y-2">
+                 <p className="text-[10px] font-bold text-amber-700/70 leading-relaxed">
+                    3 lessons cached. Changes will sync when campus LAN is detected.
+                 </p>
+                 <Progress value={33} className="h-1 bg-amber-500/20" indicatorClassName="bg-amber-500" />
               </div>
-            )}
 
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-[9px] font-black text-sidebar-foreground/40 uppercase tracking-widest flex items-center gap-1">
-                <Activity className="w-3 h-3" /> Waiting for LAN
-              </span>
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-7 px-2 text-[9px] font-black uppercase tracking-widest border-sidebar-border bg-transparent hover:bg-sidebar-accent"
-              >
-                Sync Now
+              <Button size="sm" className="w-full h-8 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-amber-500/20">
+                 Force Sync
               </Button>
-            </div>
-          </div>
+           </div>
         </div>
       </aside>
 
