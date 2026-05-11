@@ -40,10 +40,20 @@ export function SiteHeader() {
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
             <Link to="/login">Sign in</Link>
           </Button>
-          <Button asChild size="sm" className="bg-gradient-primary text-primary-foreground hover:opacity-95">
+          <Button
+            asChild
+            size="sm"
+            className="bg-gradient-primary text-primary-foreground hover:opacity-95"
+          >
             <Link to="/register">Get started</Link>
           </Button>
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
@@ -52,7 +62,12 @@ export function SiteHeader() {
         <div className="border-t border-border/60 bg-background md:hidden">
           <div className="container mx-auto flex flex-col gap-1 px-4 py-3">
             {nav.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm hover:bg-muted">
+              <Link
+                key={n.to}
+                to={n.to}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2 text-sm hover:bg-muted"
+              >
                 {n.label}
               </Link>
             ))}

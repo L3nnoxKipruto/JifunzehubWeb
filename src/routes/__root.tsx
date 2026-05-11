@@ -73,14 +73,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "JifunzeHub — Learning Without Internet Barriers" },
+      {
+        name: "description",
+        content:
+          "Offline-first TVET learning platform for institutions in low-connectivity regions. Sync over USB, local hotspot, or the cloud.",
+      },
+      { name: "author", content: "JifunzeHub Team" },
+      { property: "og:title", content: "JifunzeHub — Offline-first TVET Learning" },
+      {
+        property: "og:description",
+        content:
+          "Inclusive transformation and empowerment through offline-capable digital education for TVET colleges.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@jifunzehub" },
     ],
     links: [
       {

@@ -8,17 +8,37 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About JifunzeHub — Inclusive Transformation in TVET" },
-      { name: "description", content: "Our mission, vision, and the values driving offline-first TVET education across Africa." },
+      {
+        name: "description",
+        content:
+          "Our mission, vision, and the values driving offline-first TVET education across Africa.",
+      },
     ],
   }),
   component: AboutPage,
 });
 
 const pillars = [
-  { icon: Target, title: "Mission", text: "To make quality TVET education accessible to every learner, regardless of internet availability or device limitations." },
-  { icon: Eye, title: "Vision", text: "An Africa where every TVET institution can confidently deliver digital, competency-based learning at scale." },
-  { icon: Heart, title: "Values", text: "Inclusion. Resilience. Respect for local context. Open knowledge. Sustainable digital infrastructure." },
-  { icon: Users, title: "Community", text: "Built with lecturers, students and IT teams from rural and peri-urban TVET colleges across the region." },
+  {
+    icon: Target,
+    title: "Mission",
+    text: "To make quality TVET education accessible to every learner, regardless of internet availability or device limitations.",
+  },
+  {
+    icon: Eye,
+    title: "Vision",
+    text: "An Africa where every TVET institution can confidently deliver digital, competency-based learning at scale.",
+  },
+  {
+    icon: Heart,
+    title: "Values",
+    text: "Inclusion. Resilience. Respect for local context. Open knowledge. Sustainable digital infrastructure.",
+  },
+  {
+    icon: Users,
+    title: "Community",
+    text: "Built with lecturers, students and IT teams from rural and peri-urban TVET colleges across the region.",
+  },
 ];
 
 function AboutPage() {
@@ -26,10 +46,16 @@ function AboutPage() {
     <PublicLayout>
       <section className="bg-gradient-hero py-20 text-primary-foreground">
         <div className="container mx-auto max-w-3xl px-4 text-center">
-          <Badge variant="secondary" className="mb-4 bg-white/15 text-primary-foreground">About us</Badge>
-          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Inclusive transformation through digital education</h1>
+          <Badge variant="secondary" className="mb-4 bg-white/15 text-primary-foreground">
+            About us
+          </Badge>
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+            Inclusive transformation through digital education
+          </h1>
           <p className="mt-4 text-primary-foreground/85">
-            JifunzeHub exists because connectivity should never be the gatekeeper of opportunity. We build learning infrastructure for the world that actually exists — patchy networks, shared devices, and brilliant students.
+            JifunzeHub exists because connectivity should never be the gatekeeper of opportunity. We
+            build learning infrastructure for the world that actually exists — patchy networks,
+            shared devices, and brilliant students.
           </p>
         </div>
       </section>
@@ -51,13 +77,21 @@ function AboutPage() {
       <section className="bg-muted/40 py-20">
         <div className="container mx-auto grid gap-10 px-4 md:grid-cols-2 md:items-center">
           <div>
-            <Badge variant="outline" className="mb-3">The story</Badge>
-            <h2 className="text-3xl font-bold tracking-tight">Built in TVET classrooms, for TVET classrooms</h2>
+            <Badge variant="outline" className="mb-3">
+              The story
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Built in TVET classrooms, for TVET classrooms
+            </h2>
             <p className="mt-4 text-muted-foreground">
-              JifunzeHub started as a partnership between vocational instructors and engineers who were tired of beautifully-built learning platforms that simply didn't work in real campuses. We rebuilt the model from the ground up: local-first storage, sync queues, USB packages, and a UX that respects bandwidth.
+              JifunzeHub started as a partnership between vocational instructors and engineers who
+              were tired of beautifully-built learning platforms that simply didn't work in real
+              campuses. We rebuilt the model from the ground up: local-first storage, sync queues,
+              USB packages, and a UX that respects bandwidth.
             </p>
             <p className="mt-3 text-muted-foreground">
-              Today we serve dozens of institutions across East Africa with a platform that feels like modern SaaS — but performs like a tool built for the field.
+              Today we serve dozens of institutions across East Africa with a platform that feels
+              like modern SaaS — but performs like a tool built for the field.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">

@@ -1,17 +1,20 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { AuthShell } from "@/components/site/AuthShell"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Lock, CheckCircle2 } from "lucide-react"
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { AuthShell } from "@/components/site/AuthShell";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Lock, CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute('/reset-password')({
+export const Route = createFileRoute("/reset-password")({
   component: ResetPasswordComponent,
-})
+});
 
 function ResetPasswordComponent() {
   return (
-    <AuthShell title="Set New Password" subtitle="Choose a strong password to secure your JifunzeHub account.">
+    <AuthShell
+      title="Set New Password"
+      subtitle="Choose a strong password to secure your JifunzeHub account."
+    >
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="password">New Password</Label>
@@ -20,7 +23,7 @@ function ResetPasswordComponent() {
             <Input id="password" type="password" placeholder="••••••••" className="pl-9" />
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="confirm">Confirm Password</Label>
           <div className="relative">
@@ -42,5 +45,5 @@ function ResetPasswordComponent() {
         </Button>
       </div>
     </AuthShell>
-  )
+  );
 }
