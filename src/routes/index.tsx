@@ -2,15 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/site/Logo";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Button } from "@/components/ui/button";
+import splash from "@/assets/splash.png";
 import {
   ArrowRight,
-  BookOpen,
   CloudOff,
-  GraduationCap,
   RadioTower,
-  ShieldCheck,
   Sparkles,
-  Users,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -49,17 +46,31 @@ function LandingPage() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden border-b border-border/60 bg-gradient-hero text-primary-foreground">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,color-mix(in_oklab,white_22%,transparent),transparent_45%),radial-gradient(circle_at_80%_0%,color-mix(in_oklab,var(--accent)_35%,transparent),transparent_40%)]" />
-          <div className="container relative mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
-            <div className="animate-jh-fade space-y-6">
-              <span className="jh-kicker border-white/25 bg-white/10 text-white/90 shadow-none backdrop-blur-md">
+        <section
+          className="relative overflow-hidden border-b border-border/60 min-h-[560px] lg:min-h-[680px]"
+          style={{ background: "linear-gradient(to right, oklch(0.42 0.18 262) 0%, oklch(0.62 0.15 255) 30%, white 58%, white 100%)" }}
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_40%,color-mix(in_oklab,white_15%,transparent),transparent_40%)]" />
+
+          {/* Splash image — anchored to the right, full height, uncropped */}
+          <div className="absolute right-0 top-0 h-full hidden lg:flex items-stretch pointer-events-none select-none" style={{ animationDelay: "80ms" }}>
+            <img
+              src={splash}
+              alt="JifunzeHub platform preview"
+              className="h-full w-auto object-contain object-right animate-jh-fade"
+              style={{ maxWidth: "42vw" }}
+            />
+          </div>
+
+          <div className="container relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+            <div className="animate-jh-fade space-y-6 max-w-xl">
+              <span className="jh-kicker border-white/25 bg-white/20 text-white/90 shadow-none backdrop-blur-md">
                 <Sparkles className="h-3.5 w-3.5 text-amber-200" />
                 TVET-grade learning OS
               </span>
-              <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
+              <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.25rem] lg:leading-[1.08] text-white">
                 Institutional learning that stays sharp —{" "}
-                <span className="text-white/95">even when the network doesn&apos;t.</span>
+                <span className="text-white/85">even when the network doesn&apos;t.</span>
               </h1>
               <p className="max-w-xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
                 JifunzeHub unifies learners, lecturers, and administrators on one calm, premium
@@ -87,55 +98,14 @@ function LandingPage() {
                   <Link to="/login">Request a pilot</Link>
                 </Button>
               </div>
-              <div className="flex flex-wrap gap-4 pt-2 text-[13px] font-medium text-white/70">
+              <div className="flex flex-wrap gap-4 pt-2 text-[13px] font-medium text-white/75">
                 <span className="inline-flex items-center gap-2">
                   <CloudOff className="h-4 w-4 text-amber-200" /> Offline lesson packs
                 </span>
-                <span className="hidden h-4 w-px bg-white/25 sm:inline" aria-hidden />
+                <span className="hidden h-4 w-px bg-white/30 sm:inline" aria-hidden />
                 <span className="inline-flex items-center gap-2">
-                  <RadioTower className="h-4 w-4 text-emerald-200" /> Campus hub aware
+                  <RadioTower className="h-4 w-4 text-emerald-300" /> Campus hub aware
                 </span>
-              </div>
-            </div>
-
-            <div
-              className="animate-jh-fade relative rounded-3xl border border-white/15 bg-white/10 p-6 shadow-elegant backdrop-blur-2xl sm:p-8"
-              style={{ animationDelay: "80ms" }}
-            >
-              <div
-                className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-accent/30 blur-3xl"
-                aria-hidden
-              />
-              <div className="relative space-y-5">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-white">Live campus snapshot</p>
-                  <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-50">
-                    Hub online
-                  </span>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {[
-                    { label: "Active learners", value: "1,284", icon: Users },
-                    { label: "Courses synced", value: "186", icon: BookOpen },
-                    { label: "Assessments queued", value: "42", icon: ShieldCheck },
-                    { label: "Departments", value: "12", icon: GraduationCap },
-                  ].map((m) => (
-                    <div
-                      key={m.label}
-                      className="rounded-2xl border border-white/10 bg-black/15 p-4 shadow-inner transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      <m.icon className="mb-2 h-4 w-4 text-white/70" />
-                      <p className="text-2xl font-semibold tabular-nums tracking-tight text-white">
-                        {m.value}
-                      </p>
-                      <p className="text-[12px] font-medium text-white/65">{m.label}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[12px] leading-relaxed text-white/65">
-                  Designed for polytechnics and TVET centers — dense when administrators need
-                  signal, soft when learners need focus.
-                </p>
               </div>
             </div>
           </div>
