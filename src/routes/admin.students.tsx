@@ -54,6 +54,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { Student } from "@/types/admin";
 
 export const Route = createFileRoute("/admin/students")({
   component: AdminStudentsComponent,
@@ -70,9 +71,9 @@ const performanceData = [
 
 function AdminStudentsComponent() {
   const [view, setView] = useState<"list" | "detail">("list");
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
-  const students = [
+  const students: Student[] = [
     {
       id: "KPU-2026-001",
       name: "Amina Hussein",
@@ -87,7 +88,7 @@ function AdminStudentsComponent() {
     {
       id: "KPU-2026-042",
       name: "David Mutua",
-      dept: "Electrical",
+      dept: "Electrical & Electronics",
       enrolled: 3,
       progress: 45,
       avgScore: 58,
@@ -98,7 +99,7 @@ function AdminStudentsComponent() {
     {
       id: "KPU-2026-112",
       name: "Sarah Wanjiru",
-      dept: "ICT",
+      dept: "Food & Beverage",
       enrolled: 5,
       progress: 72,
       avgScore: 84,
@@ -109,17 +110,50 @@ function AdminStudentsComponent() {
     {
       id: "KPU-2026-205",
       name: "John Kamau",
-      dept: "Mechanical",
+      dept: "Automotive Engineering",
       enrolled: 3,
       progress: 12,
       avgScore: 42,
       syncStatus: "pending",
       attendance: 45,
       avatar: "https://i.pravatar.cc/150?u=john"
+    },
+    {
+      id: "KPU-2026-311",
+      name: "Brian Ochieng",
+      dept: "Building Technology",
+      enrolled: 4,
+      progress: 65,
+      avgScore: 71,
+      syncStatus: "offline",
+      attendance: 88,
+      avatar: "https://i.pravatar.cc/150?u=brian"
+    },
+    {
+      id: "KPU-2026-418",
+      name: "Mercy Kiprop",
+      dept: "Fashion Design",
+      enrolled: 6,
+      progress: 94,
+      avgScore: 89,
+      syncStatus: "synced",
+      attendance: 96,
+      avatar: "https://i.pravatar.cc/150?u=mercy"
+    },
+    {
+      id: "KPU-2026-502",
+      name: "Peter Njuguna",
+      dept: "Plumbing",
+      enrolled: 2,
+      progress: 34,
+      avgScore: 55,
+      syncStatus: "pending",
+      attendance: 64,
+      avatar: "https://i.pravatar.cc/150?u=peter"
     }
   ];
 
-  const handleOpenStudent = (student: any) => {
+  const handleOpenStudent = (student: Student) => {
     setSelectedStudent(student);
     setView("detail");
   };
@@ -240,9 +274,9 @@ function AdminStudentsComponent() {
                       <h4 className="text-lg font-black mb-6">Enrolled Courses</h4>
                       <div className="space-y-4">
                          {[
-                           { title: "Networking Essentials", progress: 88, status: "Active" },
-                           { title: "Solar Installation", progress: 45, status: "Active" },
-                           { title: "Mobile Apps 101", progress: 100, status: "Completed" }
+                           { title: "Networking Essentials (CCNA)", progress: 88, status: "Active" },
+                           { title: "Solar Photovoltaic Installation", progress: 45, status: "Active" },
+                           { title: "Computer Maintenance & Repair", progress: 100, status: "Completed" }
                          ].map((c, i) => (
                            <div key={i} className="space-y-3 p-4 rounded-2xl bg-muted/30 border border-border/40">
                               <div className="flex justify-between items-start">
@@ -322,7 +356,7 @@ function AdminStudentsComponent() {
           </div>
 
           <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
-            {["All Students", "Active", "Offline Only", "At Risk", "High Performers", "ICT Dept", "Mechanical"].map((cat, i) => (
+            {["All Students", "Active", "Offline Only", "At Risk", "High Performers", "ICT Dept", "Electrical", "Hospitality"].map((cat, i) => (
               <Badge key={i} variant={i === 0 ? "default" : "outline"} className="px-6 py-2 rounded-xl font-black cursor-pointer whitespace-nowrap">
                 {cat}
               </Badge>

@@ -42,6 +42,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { Department } from "@/types/admin";
 
 export const Route = createFileRoute("/admin/departments")({
   component: AdminDepartmentsComponent,
@@ -49,9 +50,9 @@ export const Route = createFileRoute("/admin/departments")({
 
 function AdminDepartmentsComponent() {
   const [view, setView] = useState<"grid" | "detail">("grid");
-  const [selectedDept, setSelectedDept] = useState<any>(null);
+  const [selectedDept, setSelectedDept] = useState<Department | null>(null);
 
-  const departments = [
+  const departments: Department[] = [
     {
       id: "DEPT-ICT",
       name: "ICT & Digital Media",
@@ -87,7 +88,7 @@ function AdminDepartmentsComponent() {
     }
   ];
 
-  const handleOpenDept = (dept: any) => {
+  const handleOpenDept = (dept: Department) => {
     setSelectedDept(dept);
     setView("detail");
   };

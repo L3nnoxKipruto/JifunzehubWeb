@@ -39,7 +39,7 @@ export const Route = createFileRoute("/dashboard/courses")({
 });
 
 function CoursesComponent() {
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
 
   const courses = [
     {
@@ -53,6 +53,7 @@ function CoursesComponent() {
       offlineLessons: 24,
       image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&auto=format&fit=crop&q=60",
       buttons: ["Resume Learning", "Download Offline Kit"],
+      courseId: "CRS-101",
     },
     {
       id: 2,
@@ -65,6 +66,7 @@ function CoursesComponent() {
       offlineLessons: 15,
       image: "https://images.unsplash.com/photo-1509391366360-fe5bb58583bb?w=800&auto=format&fit=crop&q=60",
       buttons: ["Continue Lab", "Sync Progress"],
+      courseId: "CRS-102",
     },
     {
       id: 3,
@@ -77,6 +79,7 @@ function CoursesComponent() {
       offlineLessons: 10,
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=60",
       buttons: ["Resume", "Download Lessons"],
+      courseId: "CRS-103",
     },
   ];
 
@@ -185,20 +188,36 @@ function CoursesComponent() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 mt-auto">
-                  {course.buttons.map((btn, i) => (
-                    <Button
-                      key={btn}
-                      variant={i === 0 ? "default" : "outline"}
-                      className={`rounded-xl text-xs font-bold h-10 ${
-                        i === 0 ? "col-span-2 py-6 text-base" : ""
-                      }`}
-                    >
-                      {btn === "Download All" || btn === "Download Offline Kit" || btn === "Download Lessons" ? (
-                        <Download className="w-4 h-4 mr-2" />
-                      ) : null}
-                      {btn}
-                    </Button>
-                  ))}
+                  {course.buttons.map((btn, i) => {
+                    const isResume = btn.includes("Resume") || btn.includes("Continue");
+                    const isDownload = btn.includes("Download");
+                    
+                    return (
+                      <Button
+                        key={btn}
+                        variant={i === 0 ? "default" : "outline"}
+                        asChild={isResume || isDownload}
+                        className={`rounded-xl text-xs font-bold h-10 ${
+                          i === 0 ? "col-span-2 py-6 text-base" : ""
+                        }`}
+                        onClick={!isResume && !isDownload ? () => {
+                          import("sonner").then(({ toast }) => {
+                            toast.promise(
+                              new Promise((r) => setTimeout(r, 2000)),
+                              { loading: "Syncing progress to campus hub…", success: "Progress synced!", error: "Sync failed." }
+                            );
+                          });
+                        } : undefined}
+                      >
+                        {isResume || isDownload ? (
+                          <Link to={isResume ? `/dashboard/player/${course.courseId}` : "/dashboard/downloads"}>
+                            {isDownload && <Download className="w-4 h-4 mr-2" />}
+                            {btn}
+                          </Link>
+                        ) : btn}
+                      </Button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

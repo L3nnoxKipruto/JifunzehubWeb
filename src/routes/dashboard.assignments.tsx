@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -50,8 +50,8 @@ function AssignmentsComponent() {
   const assignments = [
     {
       id: 1,
-      title: "Network Design Project",
-      course: "CCNA Foundations",
+      title: "Solar Array Sizing Lab",
+      course: "Solar Photovoltaic Installation",
       due: "Tomorrow",
       status: "Pending",
       buttons: ["Open Assignment", "Save Offline", "Submit"],
@@ -60,8 +60,8 @@ function AssignmentsComponent() {
     },
     {
       id: 2,
-      title: "Solar Energy Report",
-      course: "Renewable Energy Systems",
+      title: "Engine Block Tear-down Report",
+      course: "Automotive Engine Diagnostics",
       due: "Friday",
       status: "Draft Saved Offline",
       buttons: ["Continue Editing", "Upload Photos", "Sync Submission"],
@@ -70,8 +70,8 @@ function AssignmentsComponent() {
     },
     {
       id: 3,
-      title: "Hospitality Reflection",
-      course: "Service Excellence",
+      title: "Service Roleplay Reflection",
+      course: "Food and Beverage Service & Sales",
       due: "Completed",
       status: "Submitted",
       grade: "Pending",
@@ -110,11 +110,28 @@ function AssignmentsComponent() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {assignment.buttons.map((btn, i) => (
-                      <Button key={btn} variant={i === 0 ? "default" : "outline"} className="rounded-xl font-bold px-6 h-12 shadow-lg transition-transform active:scale-95">
-                        {btn}
-                      </Button>
-                    ))}
+                    {assignment.buttons.map((btn, i) => {
+                      const isOpen = btn.includes("Open") || btn.includes("Continue Editing") || btn.includes("View Submission");
+                      return (
+                        <Button
+                          key={btn}
+                          variant={i === 0 ? "default" : "outline"}
+                          asChild={isOpen}
+                          className="rounded-xl font-bold px-6 h-12 shadow-lg transition-transform active:scale-95"
+                          onClick={!isOpen ? () => {
+                            import("sonner").then(({ toast }) => {
+                              if (btn === "Submit") toast.promise(new Promise(r => setTimeout(r, 2000)), { loading: "Submitting assignment…", success: "Submitted successfully! Queued for sync.", error: "Submission failed." });
+                              else if (btn === "Save Offline") toast.success("Draft saved offline. Will sync when connected.");
+                              else if (btn === "Upload Photos") toast.success("Photo upload dialog opened.");
+                              else if (btn === "Sync Submission") toast.promise(new Promise(r => setTimeout(r, 1500)), { loading: "Syncing submission…", success: "Submission synced to campus server!", error: "Sync failed." });
+                              else if (btn === "Lecturer Feedback") toast.success("Feedback request sent to lecturer.");
+                            });
+                          } : undefined}
+                        >
+                          {isOpen ? <Link to={`/dashboard/player/CRS-101`}>{btn}</Link> : btn}
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
                 {assignment.grade && (
@@ -133,7 +150,7 @@ function AssignmentsComponent() {
             <div className="flex justify-between items-center">
               <div>
                 <CardTitle className="text-3xl font-black text-primary">Assignment Viewer</CardTitle>
-                <CardDescription className="text-lg font-bold text-muted-foreground">Network Design Project — CCNA Foundations</CardDescription>
+                <CardDescription className="text-lg font-bold text-muted-foreground">Solar Array Sizing Lab — Solar Photovoltaic Installation</CardDescription>
               </div>
               <Button variant="ghost" className="rounded-full h-12 w-12 hover:bg-primary/10 text-primary">
                 <ExternalLink className="w-6 h-6" />
@@ -151,12 +168,12 @@ function AssignmentsComponent() {
               <TabsContent value="instructions" className="p-8 space-y-6 m-0 focus-visible:outline-none bg-card/30">
                  <div className="space-y-4">
                     <h4 className="text-xl font-black">Project Overview</h4>
-                    <p className="font-medium text-muted-foreground leading-relaxed">Design and implement a secure network topology for a medium-sized enterprise with three regional offices. You must include VLAN segmentation, OSPF routing, and basic firewall rules.</p>
+                    <p className="font-medium text-muted-foreground leading-relaxed">Calculate the total daily load for a rural clinic and design an appropriate standalone solar PV system. You must specify panel wattage, battery capacity, and inverter size.</p>
                  </div>
                  <div className="space-y-4 pt-6 border-t border-border/40">
                     <h4 className="text-xl font-black">Technical Requirements</h4>
                     <ul className="grid gap-3">
-                       {['At least 4 VLANs per office', 'Redundant ISP connections', 'Secured VTY lines', 'Complete IP addressing scheme'].map((req, i) => (
+                       {['Accurate load profile table', 'Battery bank sizing with 3 days autonomy', 'Inverter sizing with surge allowance', 'Wiring diagram sketch (photo upload)'].map((req, i) => (
                           <li key={i} className="flex items-center gap-3 font-bold text-sm">
                              <div className="w-1.5 h-1.5 rounded-full bg-primary"></div> {req}
                           </li>
@@ -235,9 +252,9 @@ function AssignmentsComponent() {
                         <AvatarFallback className="bg-primary text-white font-bold">EK</AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-black">Eng. Kamau</p>
+                        <p className="font-black">Dr. Sarah Omondi</p>
                         <p className="text-muted-foreground mt-2 font-medium">
-                          "Great start on the topology. Make sure your DHCP pools don't overlap with the static management IPs you've assigned to the core switches."
+                          "Great start on the calculations. Ensure your battery bank sizing accounts for the correct depth of discharge for lead-acid batteries."
                         </p>
                       </div>
                     </div>

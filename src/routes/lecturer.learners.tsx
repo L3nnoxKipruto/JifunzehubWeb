@@ -73,10 +73,10 @@ function LecturerLearnersComponent() {
 
   const learners = [
     {
-      id: "S001",
+      id: "KPU-2026-001",
       name: "Amina Hussein",
-      dept: "ICT",
-      course: "Networking Essentials",
+      dept: "Solar Tech",
+      course: "Solar PV Installation",
       progress: 88,
       avgScore: 92,
       syncStatus: "synced",
@@ -85,10 +85,10 @@ function LecturerLearnersComponent() {
       avatar: "https://i.pravatar.cc/150?u=amina"
     },
     {
-      id: "S002",
+      id: "KPU-2026-042",
       name: "David Mutua",
-      dept: "ICT",
-      course: "Networking Essentials",
+      dept: "Electrical",
+      course: "Electrical Installations",
       progress: 45,
       avgScore: 58,
       syncStatus: "offline",
@@ -97,10 +97,10 @@ function LecturerLearnersComponent() {
       avatar: "https://i.pravatar.cc/150?u=david"
     },
     {
-      id: "S003",
+      id: "KPU-2026-112",
       name: "Sarah Wanjiru",
-      dept: "Electrical",
-      course: "Solar Power Systems",
+      dept: "Hospitality",
+      course: "Food & Beverage Mgt",
       progress: 72,
       avgScore: 84,
       syncStatus: "synced",
@@ -109,10 +109,10 @@ function LecturerLearnersComponent() {
       avatar: "https://i.pravatar.cc/150?u=sarah"
     },
     {
-      id: "S004",
+      id: "KPU-2026-205",
       name: "John Kamau",
-      dept: "Mech",
-      course: "Automotive Diag",
+      dept: "Automotive",
+      course: "Engine Diagnostics",
       progress: 12,
       avgScore: 42,
       syncStatus: "pending",

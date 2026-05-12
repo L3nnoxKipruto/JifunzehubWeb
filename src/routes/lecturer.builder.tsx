@@ -45,6 +45,9 @@ import {
   PlayCircle,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { AnimatePresence } from "framer-motion";
+import { UploadProgress } from "@/components/ui/upload-progress";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/lecturer/builder")({
   component: CourseBuilderComponent,
@@ -54,13 +57,32 @@ function CourseBuilderComponent() {
   const [modules, setModules] = useState([
     {
       id: 1,
-      title: "Introduction to Networking",
+      title: "Introduction to Solar Photovoltaics",
       lessons: [
-        { id: 101, title: "What is a Network?", type: "video", status: "uploaded" },
-        { id: 102, title: "OSI Model Overview", type: "pdf", status: "uploaded" }
+        { id: 101, title: "Solar Energy Fundamentals", type: "video", status: "uploaded" },
+        { id: 102, title: "Safety Protocols for Installers", type: "pdf", status: "uploaded" }
       ]
     }
   ]);
+
+  const [uploadingFile, setUploadingFile] = useState<{ name: string; progress: number; status: "uploading" | "completed" | "error" } | null>(null);
+
+  const simulateUpload = (fileName: string) => {
+    setUploadingFile({ name: fileName, progress: 0, status: "uploading" });
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += 10;
+      setUploadingFile(prev => prev ? { ...prev, progress: prog } : null);
+      if (prog >= 100) {
+        clearInterval(interval);
+        setUploadingFile(prev => prev ? { ...prev, status: "completed" } : null);
+        setTimeout(() => {
+          setUploadingFile(null);
+          toast.success(`${fileName} uploaded and cached successfully!`);
+        }, 1500);
+      }
+    }, 300);
+  };
 
   const addModule = () => {
     setModules([...modules, { id: Date.now(), title: "New Module", lessons: [] }]);
@@ -176,17 +198,35 @@ function CourseBuilderComponent() {
                            ))}
                            
                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2">
-                              {[
-                                { icon: Video, label: 'Video', color: 'text-blue-500' },
-                                { icon: FileText, label: 'PDF', color: 'text-emerald-500' },
-                                { icon: FileCode, label: 'Lab/Practical', color: 'text-purple-500' },
-                                { icon: ClipboardList, label: 'Assignment', color: 'text-rose-500' }
-                              ].map((type) => (
-                                <Button key={type.label} variant="outline" className="h-10 rounded-xl border-dashed border-border/60 hover:bg-muted text-[10px] font-black uppercase tracking-widest gap-2">
-                                   <type.icon className={`w-3.5 h-3.5 ${type.color}`} /> {type.label}
-                                </Button>
-                              ))}
-                           </div>
+                               {[
+                                 { icon: Video, label: 'Video', color: 'text-blue-500', file: 'Solar_Intro.mp4' },
+                                 { icon: FileText, label: 'PDF', color: 'text-emerald-500', file: 'Installation_Guide.pdf' },
+                                 { icon: FileCode, label: 'Lab/Practical', color: 'text-purple-500', file: 'Practical_Steps.zip' },
+                                 { icon: ClipboardList, label: 'Assignment', color: 'text-rose-500', file: 'Assessment_Quiz.json' }
+                               ].map((type) => (
+                                 <Button 
+                                   key={type.label} 
+                                   variant="outline" 
+                                   className="h-10 rounded-xl border-dashed border-border/60 hover:bg-muted text-[10px] font-black uppercase tracking-widest gap-2"
+                                   onClick={() => simulateUpload(type.file)}
+                                 >
+                                    <type.icon className={`w-3.5 h-3.5 ${type.color}`} /> {type.label}
+                                 </Button>
+                               ))}
+                            </div>
+
+                            <AnimatePresence>
+                              {uploadingFile && (
+                                <div className="mt-4">
+                                  <UploadProgress 
+                                    fileName={uploadingFile.name} 
+                                    progress={uploadingFile.progress} 
+                                    status={uploadingFile.status} 
+                                    onCancel={() => setUploadingFile(null)}
+                                  />
+                                </div>
+                              )}
+                            </AnimatePresence>
                         </div>
                      </div>
                   </Card>

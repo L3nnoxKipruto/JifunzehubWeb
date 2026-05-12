@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -40,15 +40,15 @@ export const Route = createFileRoute("/dashboard/downloads")({
 
 function DownloadsComponent() {
   const activeDownloads = [
-    { id: 1, title: "Module 5: Routing Protocols (Video)", course: "Networking Essentials", progress: 42, speed: "1.2 MB/s", remaining: "12m", size: "850 MB", status: "Downloading" },
-    { id: 2, title: "Subnetting Cheat Sheet (PDF)", course: "Networking Essentials", progress: 0, speed: "Queued", remaining: "--", size: "2 MB", status: "Paused" },
+    { id: 1, title: "Module 3: Battery Bank Sizing (Video)", course: "Solar PV Installation", progress: 42, speed: "1.2 MB/s", remaining: "12m", size: "850 MB", status: "Downloading" },
+    { id: 2, title: "Kenya Building Code (PDF)", course: "Building Technology", progress: 0, speed: "Queued", remaining: "--", size: "12 MB", status: "Paused" },
   ];
 
   const completed = [
-    { id: 1, title: "Electrical Safety Standards", size: "120 MB", date: "Yesterday" },
-    { id: 2, title: "Module 1: Intro to TVET", size: "15 MB", date: "2 days ago" },
-    { id: 3, title: "Module 4: Subnetting Architectures", size: "450 MB", date: "Today, 10:24 AM" },
-    { id: 4, title: "Workshop Safety Handbook", size: "12 MB", date: "Yesterday" },
+    { id: 1, title: "Electrical Safety Standards (KEBS)", size: "120 MB", date: "Yesterday" },
+    { id: 2, title: "Module 1: Intro to TVET Competency", size: "15 MB", date: "2 days ago" },
+    { id: 3, title: "Module 4: Engine Block Casting", size: "450 MB", date: "Today, 10:24 AM" },
+    { id: 4, title: "Food Production & Hygiene Handbook", size: "12 MB", date: "Yesterday" },
   ];
 
   return (
@@ -97,9 +97,22 @@ function DownloadsComponent() {
               <div className="space-y-6">
                  <h4 className="text-lg font-black">Queue Actions</h4>
                  <div className="space-y-3">
-                    <Button className="w-full h-12 rounded-xl font-black bg-primary shadow-lg shadow-primary/20">Resume All</Button>
-                    <Button variant="outline" className="w-full h-12 rounded-xl font-black border-border/60">Pause All Queue</Button>
-                    <Button variant="outline" className="w-full h-12 rounded-xl font-black border-border/60 text-destructive hover:bg-destructive/10">Clear Failed</Button>
+                    <Button
+                      className="w-full h-12 rounded-xl font-black bg-primary shadow-lg shadow-primary/20"
+                      onClick={() => import("sonner").then(({ toast }) =>
+                        toast.promise(new Promise(r => setTimeout(r, 1500)), { loading: "Resuming all downloads…", success: "All downloads resumed!", error: "Failed." })
+                      )}
+                    >Resume All</Button>
+                    <Button
+                      variant="outline"
+                      className="w-full h-12 rounded-xl font-black border-border/60"
+                      onClick={() => import("sonner").then(({ toast }) => toast.success("All downloads paused."))}
+                    >Pause All Queue</Button>
+                    <Button
+                      variant="outline"
+                      className="w-full h-12 rounded-xl font-black border-border/60 text-destructive hover:bg-destructive/10"
+                      onClick={() => import("sonner").then(({ toast }) => toast.success("Failed downloads cleared from queue."))}
+                    >Clear Failed</Button>
                  </div>
               </div>
            </Card>
@@ -159,7 +172,10 @@ function DownloadsComponent() {
                           <p className="text-xs font-bold text-muted-foreground">{item.size} • {item.date}</p>
                        </div>
                     </div>
-                    <Button variant="ghost" size="sm" className="font-black text-primary hover:bg-primary/10 rounded-xl">Open</Button>
+                     <Button asChild variant="ghost" size="sm" className="font-black text-primary hover:bg-primary/10 rounded-xl">
+                       <Link to="/dashboard/player/CRS-101">Open</Link>
+                     </Button>
+
                  </Card>
               ))}
            </div>

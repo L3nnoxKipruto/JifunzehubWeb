@@ -86,7 +86,7 @@ function LecturerOverview() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2">
             <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
-              Karibu back, Lecturer James 👋
+              Karibu back, Dr. Omondi 👋
             </h1>
             <p className="text-lg text-muted-foreground font-medium">
               Here’s an overview of your teaching activities today.
@@ -94,14 +94,14 @@ function LecturerOverview() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
-              <Upload className="w-5 h-5 mr-2" /> Upload Lesson
+            <Button asChild className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
+              <Link to="/lecturer/builder"><Upload className="w-5 h-5 mr-2" /> Upload Lesson</Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <FileCheck className="w-5 h-5 mr-2" /> Create Assessment
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/lecturer/assessments"><FileCheck className="w-5 h-5 mr-2" /> Create Assessment</Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <RefreshCw className="w-5 h-5 mr-2" /> Sync Content
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/lecturer/sync"><RefreshCw className="w-5 h-5 mr-2" /> Sync Content</Link>
             </Button>
             <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted" asChild>
               <Link to="/lecturer/builder">
@@ -193,7 +193,7 @@ function LecturerOverview() {
               </h2>
               <div className="grid gap-4">
                 {[
-                  { title: "Lesson Uploaded: Module 4.2", course: "Networking Essentials", time: "12 mins ago", icon: Video, color: "text-blue-500", bg: "bg-blue-500/10" },
+                  { title: "Lesson Uploaded: Module 4.2", course: "Solar PV Installation", time: "12 mins ago", icon: Video, color: "text-blue-500", bg: "bg-blue-500/10" },
                   { title: "New Submission: Lab Practical 3", student: "David Mutua", course: "Solar Systems", time: "45 mins ago", icon: FileUp, color: "text-primary", bg: "bg-primary/10" },
                   { title: "Course Updated: Practical 1", course: "Automotive Diagnostics", time: "2 hours ago", icon: RefreshCw, color: "text-emerald-500", bg: "bg-emerald-500/10" },
                 ].map((act, i) => (
@@ -249,7 +249,7 @@ function LecturerOverview() {
                    </div>
                    <Progress value={98} className="h-2" />
                 </div>
-                <Button className="w-full rounded-2xl h-12 font-black shadow-lg shadow-primary/20">Open Sync Center</Button>
+                <Button asChild className="w-full rounded-2xl h-12 font-black shadow-lg shadow-primary/20"><Link to="/lecturer/sync">Open Sync Center</Link></Button>
               </CardContent>
             </Card>
 
@@ -262,7 +262,7 @@ function LecturerOverview() {
               <CardContent className="p-0">
                 <div className="divide-y divide-border/40">
                   {[
-                    { title: "Grade CAT 1 Submissions", deadline: "Today", course: "Networking Essentials", count: "12 pending", type: "grade" },
+                    { title: "Grade CAT 1 Submissions", deadline: "Today", course: "Solar PV Installation", count: "12 pending", type: "grade" },
                     { title: "Resolve Sync Conflict", deadline: "ASAP", course: "Solar Lab 3", count: "1 device error", type: "alert" },
                     { title: "Upload Module 5 PDF", deadline: "In 2 Days", course: "Automotive Diag", count: "Missing resource", type: "upload" }
                   ].map((task, i) => (
@@ -290,7 +290,7 @@ function LecturerOverview() {
               <CardContent className="p-0">
                 <div className="divide-y divide-border/40">
                   {[
-                    { title: "Amina Hussein", desc: "Question about Lesson 14.2 Subnetting", type: "student" },
+                    { title: "Amina Hussein", desc: "Question about Lesson 4.2 Battery Sizing", type: "student" },
                     { title: "Dept Head Office", desc: "Staff meeting tomorrow in Lab 2 @ 10AM", type: "office" },
                     { title: "JifunzeHub System", desc: "Weekly sync summary for your 8 courses", type: "system" }
                   ].map((msg, i) => (
@@ -304,7 +304,7 @@ function LecturerOverview() {
                   ))}
                 </div>
                 <div className="p-4 bg-muted/20 border-t border-border/40">
-                  <Button variant="ghost" className="w-full font-black text-sm text-primary hover:bg-primary/5">View All Messages</Button>
+                  <Button asChild variant="ghost" className="w-full font-black text-sm text-primary hover:bg-primary/5"><Link to="/lecturer/learners">View All Messages</Link></Button>
                 </div>
               </CardContent>
             </Card>

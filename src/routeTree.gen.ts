@@ -37,7 +37,9 @@ import { Route as DashboardSyncRouteImport } from './routes/dashboard.sync'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardPlayerRouteImport } from './routes/dashboard.player'
 import { Route as DashboardOfflineLibraryRouteImport } from './routes/dashboard.offline-library'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
+import { Route as DashboardFeesRouteImport } from './routes/dashboard.fees'
 import { Route as DashboardDownloadsRouteImport } from './routes/dashboard.downloads'
 import { Route as DashboardCoursesRouteImport } from './routes/dashboard.courses'
 import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
@@ -45,12 +47,16 @@ import { Route as DashboardAssignmentsRouteImport } from './routes/dashboard.ass
 import { Route as DashboardAssessmentsRouteImport } from './routes/dashboard.assessments'
 import { Route as CoreDeviceSyncRouteImport } from './routes/core.device-sync'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminLocalServerRouteImport } from './routes/admin.local-server'
 import { Route as AdminLecturersRouteImport } from './routes/admin.lecturers'
+import { Route as AdminFinanceRouteImport } from './routes/admin.finance'
 import { Route as AdminDevicesRouteImport } from './routes/admin.devices'
 import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
 import { Route as AdminCoursesRouteImport } from './routes/admin.courses'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as DashboardPlayerCourseIdRouteImport } from './routes/dashboard.player.$courseId'
+import { Route as DashboardAssessmentsIdRouteImport } from './routes/dashboard.assessments.$id'
 
 const SystemOverviewRoute = SystemOverviewRouteImport.update({
   id: '/system-overview',
@@ -192,9 +198,19 @@ const DashboardOfflineLibraryRoute = DashboardOfflineLibraryRouteImport.update({
   path: '/offline-library',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardFeesRoute = DashboardFeesRouteImport.update({
+  id: '/fees',
+  path: '/fees',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardDownloadsRoute = DashboardDownloadsRouteImport.update({
@@ -232,6 +248,11 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLocalServerRoute = AdminLocalServerRouteImport.update({
   id: '/local-server',
   path: '/local-server',
@@ -240,6 +261,11 @@ const AdminLocalServerRoute = AdminLocalServerRouteImport.update({
 const AdminLecturersRoute = AdminLecturersRouteImport.update({
   id: '/lecturers',
   path: '/lecturers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFinanceRoute = AdminFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDevicesRoute = AdminDevicesRouteImport.update({
@@ -261,6 +287,16 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => AdminRoute,
+} as any)
+const DashboardPlayerCourseIdRoute = DashboardPlayerCourseIdRouteImport.update({
+  id: '/$courseId',
+  path: '/$courseId',
+  getParentRoute: () => DashboardPlayerRoute,
+} as any)
+const DashboardAssessmentsIdRoute = DashboardAssessmentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardAssessmentsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -284,18 +320,22 @@ export interface FileRoutesByFullPath {
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/devices': typeof AdminDevicesRoute
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/lecturers': typeof AdminLecturersRoute
   '/admin/local-server': typeof AdminLocalServerRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/core/device-sync': typeof CoreDeviceSyncRoute
-  '/dashboard/assessments': typeof DashboardAssessmentsRoute
+  '/dashboard/assessments': typeof DashboardAssessmentsRouteWithChildren
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/courses': typeof DashboardCoursesRoute
   '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/offline-library': typeof DashboardOfflineLibraryRoute
-  '/dashboard/player': typeof DashboardPlayerRoute
+  '/dashboard/player': typeof DashboardPlayerRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/sync': typeof DashboardSyncRoute
   '/lecturer/assessments': typeof LecturerAssessmentsRoute
@@ -306,6 +346,8 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/lecturer/': typeof LecturerIndexRoute
+  '/dashboard/assessments/$id': typeof DashboardAssessmentsIdRoute
+  '/dashboard/player/$courseId': typeof DashboardPlayerCourseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -325,18 +367,22 @@ export interface FileRoutesByTo {
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/devices': typeof AdminDevicesRoute
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/lecturers': typeof AdminLecturersRoute
   '/admin/local-server': typeof AdminLocalServerRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/core/device-sync': typeof CoreDeviceSyncRoute
-  '/dashboard/assessments': typeof DashboardAssessmentsRoute
+  '/dashboard/assessments': typeof DashboardAssessmentsRouteWithChildren
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/courses': typeof DashboardCoursesRoute
   '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/offline-library': typeof DashboardOfflineLibraryRoute
-  '/dashboard/player': typeof DashboardPlayerRoute
+  '/dashboard/player': typeof DashboardPlayerRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/sync': typeof DashboardSyncRoute
   '/lecturer/assessments': typeof LecturerAssessmentsRoute
@@ -347,6 +393,8 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/lecturer': typeof LecturerIndexRoute
+  '/dashboard/assessments/$id': typeof DashboardAssessmentsIdRoute
+  '/dashboard/player/$courseId': typeof DashboardPlayerCourseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -370,18 +418,22 @@ export interface FileRoutesById {
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/devices': typeof AdminDevicesRoute
+  '/admin/finance': typeof AdminFinanceRoute
   '/admin/lecturers': typeof AdminLecturersRoute
   '/admin/local-server': typeof AdminLocalServerRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/core/device-sync': typeof CoreDeviceSyncRoute
-  '/dashboard/assessments': typeof DashboardAssessmentsRoute
+  '/dashboard/assessments': typeof DashboardAssessmentsRouteWithChildren
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/courses': typeof DashboardCoursesRoute
   '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/offline-library': typeof DashboardOfflineLibraryRoute
-  '/dashboard/player': typeof DashboardPlayerRoute
+  '/dashboard/player': typeof DashboardPlayerRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/sync': typeof DashboardSyncRoute
   '/lecturer/assessments': typeof LecturerAssessmentsRoute
@@ -392,6 +444,8 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/lecturer/': typeof LecturerIndexRoute
+  '/dashboard/assessments/$id': typeof DashboardAssessmentsIdRoute
+  '/dashboard/player/$courseId': typeof DashboardPlayerCourseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -416,8 +470,10 @@ export interface FileRouteTypes {
     | '/admin/courses'
     | '/admin/departments'
     | '/admin/devices'
+    | '/admin/finance'
     | '/admin/lecturers'
     | '/admin/local-server'
+    | '/admin/settings'
     | '/admin/students'
     | '/core/device-sync'
     | '/dashboard/assessments'
@@ -425,7 +481,9 @@ export interface FileRouteTypes {
     | '/dashboard/certificates'
     | '/dashboard/courses'
     | '/dashboard/downloads'
+    | '/dashboard/fees'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/offline-library'
     | '/dashboard/player'
     | '/dashboard/settings'
@@ -438,6 +496,8 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/lecturer/'
+    | '/dashboard/assessments/$id'
+    | '/dashboard/player/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -457,8 +517,10 @@ export interface FileRouteTypes {
     | '/admin/courses'
     | '/admin/departments'
     | '/admin/devices'
+    | '/admin/finance'
     | '/admin/lecturers'
     | '/admin/local-server'
+    | '/admin/settings'
     | '/admin/students'
     | '/core/device-sync'
     | '/dashboard/assessments'
@@ -466,7 +528,9 @@ export interface FileRouteTypes {
     | '/dashboard/certificates'
     | '/dashboard/courses'
     | '/dashboard/downloads'
+    | '/dashboard/fees'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/offline-library'
     | '/dashboard/player'
     | '/dashboard/settings'
@@ -479,6 +543,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/lecturer'
+    | '/dashboard/assessments/$id'
+    | '/dashboard/player/$courseId'
   id:
     | '__root__'
     | '/'
@@ -501,8 +567,10 @@ export interface FileRouteTypes {
     | '/admin/courses'
     | '/admin/departments'
     | '/admin/devices'
+    | '/admin/finance'
     | '/admin/lecturers'
     | '/admin/local-server'
+    | '/admin/settings'
     | '/admin/students'
     | '/core/device-sync'
     | '/dashboard/assessments'
@@ -510,7 +578,9 @@ export interface FileRouteTypes {
     | '/dashboard/certificates'
     | '/dashboard/courses'
     | '/dashboard/downloads'
+    | '/dashboard/fees'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/offline-library'
     | '/dashboard/player'
     | '/dashboard/settings'
@@ -523,6 +593,8 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/lecturer/'
+    | '/dashboard/assessments/$id'
+    | '/dashboard/player/$courseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -743,11 +815,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOfflineLibraryRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/messages': {
       id: '/dashboard/messages'
       path: '/messages'
       fullPath: '/dashboard/messages'
       preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/fees': {
+      id: '/dashboard/fees'
+      path: '/fees'
+      fullPath: '/dashboard/fees'
+      preLoaderRoute: typeof DashboardFeesRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/downloads': {
@@ -799,6 +885,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStudentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/local-server': {
       id: '/admin/local-server'
       path: '/local-server'
@@ -811,6 +904,13 @@ declare module '@tanstack/react-router' {
       path: '/lecturers'
       fullPath: '/admin/lecturers'
       preLoaderRoute: typeof AdminLecturersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/finance': {
+      id: '/admin/finance'
+      path: '/finance'
+      fullPath: '/admin/finance'
+      preLoaderRoute: typeof AdminFinanceRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/devices': {
@@ -841,6 +941,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/dashboard/player/$courseId': {
+      id: '/dashboard/player/$courseId'
+      path: '/$courseId'
+      fullPath: '/dashboard/player/$courseId'
+      preLoaderRoute: typeof DashboardPlayerCourseIdRouteImport
+      parentRoute: typeof DashboardPlayerRoute
+    }
+    '/dashboard/assessments/$id': {
+      id: '/dashboard/assessments/$id'
+      path: '/$id'
+      fullPath: '/dashboard/assessments/$id'
+      preLoaderRoute: typeof DashboardAssessmentsIdRouteImport
+      parentRoute: typeof DashboardAssessmentsRoute
+    }
   }
 }
 
@@ -849,8 +963,10 @@ interface AdminRouteChildren {
   AdminCoursesRoute: typeof AdminCoursesRoute
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminDevicesRoute: typeof AdminDevicesRoute
+  AdminFinanceRoute: typeof AdminFinanceRoute
   AdminLecturersRoute: typeof AdminLecturersRoute
   AdminLocalServerRoute: typeof AdminLocalServerRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -860,37 +976,66 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCoursesRoute: AdminCoursesRoute,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminDevicesRoute: AdminDevicesRoute,
+  AdminFinanceRoute: AdminFinanceRoute,
   AdminLecturersRoute: AdminLecturersRoute,
   AdminLocalServerRoute: AdminLocalServerRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface DashboardAssessmentsRouteChildren {
+  DashboardAssessmentsIdRoute: typeof DashboardAssessmentsIdRoute
+}
+
+const DashboardAssessmentsRouteChildren: DashboardAssessmentsRouteChildren = {
+  DashboardAssessmentsIdRoute: DashboardAssessmentsIdRoute,
+}
+
+const DashboardAssessmentsRouteWithChildren =
+  DashboardAssessmentsRoute._addFileChildren(DashboardAssessmentsRouteChildren)
+
+interface DashboardPlayerRouteChildren {
+  DashboardPlayerCourseIdRoute: typeof DashboardPlayerCourseIdRoute
+}
+
+const DashboardPlayerRouteChildren: DashboardPlayerRouteChildren = {
+  DashboardPlayerCourseIdRoute: DashboardPlayerCourseIdRoute,
+}
+
+const DashboardPlayerRouteWithChildren = DashboardPlayerRoute._addFileChildren(
+  DashboardPlayerRouteChildren,
+)
+
 interface DashboardRouteChildren {
-  DashboardAssessmentsRoute: typeof DashboardAssessmentsRoute
+  DashboardAssessmentsRoute: typeof DashboardAssessmentsRouteWithChildren
   DashboardAssignmentsRoute: typeof DashboardAssignmentsRoute
   DashboardCertificatesRoute: typeof DashboardCertificatesRoute
   DashboardCoursesRoute: typeof DashboardCoursesRoute
   DashboardDownloadsRoute: typeof DashboardDownloadsRoute
+  DashboardFeesRoute: typeof DashboardFeesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
   DashboardOfflineLibraryRoute: typeof DashboardOfflineLibraryRoute
-  DashboardPlayerRoute: typeof DashboardPlayerRoute
+  DashboardPlayerRoute: typeof DashboardPlayerRouteWithChildren
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardSyncRoute: typeof DashboardSyncRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAssessmentsRoute: DashboardAssessmentsRoute,
+  DashboardAssessmentsRoute: DashboardAssessmentsRouteWithChildren,
   DashboardAssignmentsRoute: DashboardAssignmentsRoute,
   DashboardCertificatesRoute: DashboardCertificatesRoute,
   DashboardCoursesRoute: DashboardCoursesRoute,
   DashboardDownloadsRoute: DashboardDownloadsRoute,
+  DashboardFeesRoute: DashboardFeesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
   DashboardOfflineLibraryRoute: DashboardOfflineLibraryRoute,
-  DashboardPlayerRoute: DashboardPlayerRoute,
+  DashboardPlayerRoute: DashboardPlayerRouteWithChildren,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardSyncRoute: DashboardSyncRoute,
   DashboardIndexRoute: DashboardIndexRoute,

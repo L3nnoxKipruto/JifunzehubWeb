@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -118,9 +119,31 @@ function CertificatesComponent() {
 
                   <div className="flex flex-wrap gap-2 pt-2">
                     {cert.buttons.map((btn, i) => (
-                      <Button key={btn} variant={i === 0 ? "default" : "outline"} className="flex-1 rounded-xl font-black h-12 shadow-lg">
+                      <Button
+                        key={btn}
+                        variant={i === 0 ? "default" : "outline"}
+                        className="flex-1 rounded-xl font-black h-12 shadow-lg"
+                        onClick={() => {
+                          import("sonner").then(({ toast }) => {
+                            if (btn === "Download PDF") {
+                              toast.promise(
+                                new Promise((r) => setTimeout(r, 1800)),
+                                { loading: "Preparing certificate PDF…", success: `${cert.title} — Certificate downloaded!`, error: "Download failed." }
+                              );
+                            } else if (btn === "Print Copy") {
+                              toast.success("Sent to printer!");
+                              window.print();
+                            } else if (btn === "Share") {
+                              toast.success("Share link copied to clipboard!");
+                            } else if (btn === "Verify" || btn === "View Certificate") {
+                              toast.success("Certificate verified on JifunzeHub Registry.");
+                            }
+                          });
+                        }}
+                      >
                         {btn === "Download PDF" && <Download className="w-4 h-4 mr-2" />}
                         {btn === "Print Copy" && <Printer className="w-4 h-4 mr-2" />}
+                        {btn === "Share" && <Share2 className="w-4 h-4 mr-2" />}
                         {btn}
                       </Button>
                     ))}
@@ -170,7 +193,9 @@ function CertificatesComponent() {
                          {req}
                       </div>
                    ))}
-                   <Button className="w-full rounded-2xl h-14 font-black text-lg shadow-xl shadow-primary/20 mt-4">Continue Course</Button>
+                   <Button asChild className="w-full rounded-2xl h-14 font-black text-lg shadow-xl shadow-primary/20 mt-4">
+                     <Link to="/dashboard/player/CRS-101">Continue Course</Link>
+                   </Button>
                 </div>
              </div>
           </Card>

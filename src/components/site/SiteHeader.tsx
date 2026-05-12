@@ -3,7 +3,6 @@ import { Menu, WifiOff } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
-import { ThemeToggle } from "./ThemeToggle";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -36,7 +35,6 @@ export function SiteHeader() {
           <span className="hidden items-center gap-1.5 rounded-full border border-border/60 bg-muted/50 px-2.5 py-1 text-xs text-muted-foreground sm:inline-flex">
             <WifiOff className="h-3 w-3" /> Offline-ready
           </span>
-          <ThemeToggle />
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
             <Link to="/login">Sign in</Link>
           </Button>

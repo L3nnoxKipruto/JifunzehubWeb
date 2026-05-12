@@ -52,6 +52,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { Lecturer } from "@/types/admin";
 
 export const Route = createFileRoute("/admin/lecturers")({
   component: AdminLecturersComponent,
@@ -66,9 +67,9 @@ const performanceData = [
 
 function AdminLecturersComponent() {
   const [view, setView] = useState<"list" | "detail">("list");
-  const [selectedLecturer, setSelectedLecturer] = useState<any>(null);
+  const [selectedLecturer, setSelectedLecturer] = useState<Lecturer | null>(null);
 
-  const lecturers = [
+  const lecturers: Lecturer[] = [
     {
       id: "LEC-001",
       name: "James M. Macharia",
@@ -83,7 +84,7 @@ function AdminLecturersComponent() {
     {
       id: "LEC-002",
       name: "Dr. Sarah Omondi",
-      dept: "Electrical",
+      dept: "Electrical & Electronics",
       courses: 3,
       students: 215,
       syncHealth: 92,
@@ -94,7 +95,7 @@ function AdminLecturersComponent() {
     {
       id: "LEC-003",
       name: "Eng. David Kamau",
-      dept: "Mechanical",
+      dept: "Automotive Engineering",
       courses: 2,
       students: 184,
       syncHealth: 45,
@@ -104,18 +105,29 @@ function AdminLecturersComponent() {
     },
     {
       id: "LEC-004",
-      name: "Prof. Amina Wanjiku",
-      dept: "ICT",
+      name: "Grace Wanjiku",
+      dept: "Hospitality Management",
       courses: 5,
-      students: 520,
+      students: 320,
       syncHealth: 100,
       performance: 94,
       lastUpload: "1 hour ago",
-      avatar: "https://i.pravatar.cc/150?u=amina_w"
+      avatar: "https://i.pravatar.cc/150?u=grace"
+    },
+    {
+      id: "LEC-005",
+      name: "Peter Ochieng",
+      dept: "Building Technology",
+      courses: 3,
+      students: 145,
+      syncHealth: 88,
+      performance: 81,
+      lastUpload: "4h ago",
+      avatar: "https://i.pravatar.cc/150?u=peter"
     }
   ];
 
-  const handleOpenLecturer = (lec: any) => {
+  const handleOpenLecturer = (lec: Lecturer) => {
     setSelectedLecturer(lec);
     setView("detail");
   };
@@ -227,9 +239,9 @@ function AdminLecturersComponent() {
                       <h4 className="text-lg font-black mb-6">Assigned Courses</h4>
                       <div className="space-y-4">
                          {[
-                           { title: "Networking Essentials", students: 184, rating: 4.8 },
-                           { title: "Cybersecurity Basics", students: 96, rating: 4.9 },
-                           { title: "IP Subnetting Lab", students: 132, rating: 4.7 }
+                           { title: "Networking Essentials (CCNA)", students: 184, rating: 4.8 },
+                           { title: "Computer Maintenance & Repair", students: 96, rating: 4.9 },
+                           { title: "Web Development Fundamentals", students: 132, rating: 4.7 }
                          ].map((c, i) => (
                            <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-muted/30 border border-border/40">
                               <div>
@@ -296,7 +308,7 @@ function AdminLecturersComponent() {
           </div>
 
           <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
-            {["All Faculty", "ICT", "Engineering", "Electrical", "Mechanical", "Highly Active", "Pending Audit"].map((cat, i) => (
+            {["All Faculty", "ICT", "Electrical & Electronics", "Automotive", "Hospitality", "Building Tech", "Pending Audit"].map((cat, i) => (
               <Badge key={i} variant={i === 0 ? "default" : "outline"} className="px-6 py-2 rounded-xl font-black cursor-pointer whitespace-nowrap">
                 {cat}
               </Badge>
@@ -309,7 +321,7 @@ function AdminLecturersComponent() {
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow className="border-border/40 hover:bg-transparent">
-                <TableHead className="font-black uppercase tracking-widest text-[10px] py-6 px-8">Lecturer</TableHead>
+                <TableHead className="font-black uppercase tracking-widest text-[10px] py-6 px-4 sm:px-8">Lecturer</TableHead>
                 <TableHead className="font-black uppercase tracking-widest text-[10px]">Department</TableHead>
                 <TableHead className="font-black uppercase tracking-widest text-[10px]">Active Courses</TableHead>
                 <TableHead className="font-black uppercase tracking-widest text-[10px]">Sync Health</TableHead>
@@ -320,7 +332,7 @@ function AdminLecturersComponent() {
             <TableBody>
               {lecturers.map((lec) => (
                 <TableRow key={lec.id} className="border-border/40 hover:bg-muted/20 transition-colors group cursor-pointer" onClick={() => handleOpenLecturer(lec)}>
-                  <TableCell className="py-6 px-8">
+                  <TableCell className="py-6 px-4 sm:px-8">
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12 border-2 border-background shadow-lg">
                         <AvatarImage src={lec.avatar} />
@@ -353,7 +365,7 @@ function AdminLecturersComponent() {
                        <span className="text-xs font-black">{lec.performance}% Eff.</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right pr-8">
+                  <TableCell className="text-right pr-4 sm:pr-8">
                     <div className="flex flex-col items-end">
                        <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">{lec.lastUpload}</span>
                        <Button size="icon" variant="ghost" className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors"><ChevronRight className="w-4 h-4" /></Button>

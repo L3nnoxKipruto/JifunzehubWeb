@@ -37,9 +37,9 @@ function MessagesComponent() {
   const [selectedChat, setSelectedChat] = useState<any>(null);
 
   const chats = [
-    { id: 1, name: "Eng. Kamau", role: "Lecturer", lastMsg: "Please check the new topology PDF.", time: "10:24 AM", unread: 2, online: true, type: "individual" },
-    { id: 2, name: "ICT Group 2024", role: "Course Group", lastMsg: "Amina: Does anyone have the lab setup?", time: "9:15 AM", unread: 0, online: false, type: "group" },
-    { id: 3, name: "Solar Lab Practical", role: "Group Discussion", lastMsg: "Sarah: I finished the wiring diagram.", time: "Yesterday", unread: 0, online: true, type: "group" },
+    { id: 1, name: "Dr. Sarah Omondi", role: "Lecturer", lastMsg: "Please check the new solar sizing guidelines.", time: "10:24 AM", unread: 2, online: true, type: "individual" },
+    { id: 2, name: "ICT Cohort 2026", role: "Course Group", lastMsg: "David: Does anyone have the routing lab setup?", time: "9:15 AM", unread: 0, online: false, type: "group" },
+    { id: 3, name: "Solar Array Sizing Lab", role: "Group Discussion", lastMsg: "Amina: I finished the load profile table.", time: "Yesterday", unread: 0, online: true, type: "group" },
   ];
 
   return (
@@ -88,7 +88,7 @@ function MessagesComponent() {
               <div className="p-6 border-b border-border/40 flex justify-between items-center bg-background/50 backdrop-blur-md">
                  <div className="flex items-center gap-4">
                     <Avatar className="h-10 w-10 border border-border/40">
-                       <AvatarFallback className="bg-primary/10 text-primary font-black">EK</AvatarFallback>
+                       <AvatarFallback className="bg-primary/10 text-primary font-black">SO</AvatarFallback>
                     </Avatar>
                     <div>
                        <h4 className="font-black text-sm">{selectedChat.name}</h4>
@@ -109,14 +109,14 @@ function MessagesComponent() {
                  
                  <div className="flex justify-start">
                     <div className="max-w-[70%] bg-muted/50 backdrop-blur-sm p-4 rounded-3xl rounded-tl-none border border-border/40 shadow-sm">
-                       <p className="text-sm font-medium">Hello Amina, please find the attached network topology for your project.</p>
+                       <p className="text-sm font-medium">Hello Amina, please find the attached sizing guidelines for your solar project.</p>
                        <span className="text-[10px] font-black text-muted-foreground uppercase mt-2 block">10:20 AM</span>
                     </div>
                  </div>
 
                  <div className="flex justify-end">
                     <div className="max-w-[70%] bg-primary p-4 rounded-3xl rounded-tr-none text-white shadow-xl">
-                       <p className="text-sm font-medium">Thank you Eng. Kamau! I'll review it and submit my report offline today.</p>
+                       <p className="text-sm font-medium">Thank you Dr. Sarah! I'll review it and submit my calculations offline today.</p>
                        <div className="flex justify-end items-center gap-1 mt-2">
                           <span className="text-[10px] font-black text-white/70 uppercase">10:22 AM</span>
                           <CheckCheck className="w-3 h-3 text-white/70" />
@@ -126,7 +126,7 @@ function MessagesComponent() {
 
                  <div className="flex justify-end">
                     <div className="max-w-[70%] bg-amber-500/10 border border-amber-500/20 p-4 rounded-3xl rounded-tr-none shadow-sm">
-                       <p className="text-sm font-medium text-amber-700">Question: Does the design include the VOIP subsystem?</p>
+                       <p className="text-sm font-medium text-amber-700">Question: Does the calculation include the AC surge allowance?</p>
                        <div className="flex justify-end items-center gap-1 mt-2">
                           <span className="text-[10px] font-black text-amber-600 uppercase">10:24 AM</span>
                           <WifiOff className="w-3 h-3 text-amber-600" />

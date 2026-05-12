@@ -62,51 +62,51 @@ function LecturerCoursesComponent() {
   const courses = [
     {
       id: 1,
-      title: "Networking Essentials (CCNA Foundations)",
-      dept: "ICT",
-      instructor: "James M.",
+      title: "Solar PV Installation & Maintenance",
+      dept: "Electrical",
+      instructor: "Dr. Omondi",
       students: 145,
       progress: 68,
       status: "published",
       offlineReady: true,
       size: "1.2 GB",
       lastUpdated: "2h ago",
-      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80",
-      description: "Comprehensive introduction to networking, IP addressing, and Cisco IOS basics.",
+      image: "https://images.unsplash.com/photo-1509391366360-12822a16d8bd?w=800&q=80",
+      description: "Comprehensive guide to sizing, installing, and maintaining off-grid solar systems for rural areas.",
       modules: 12,
       resources: 45,
       assessments: 8
     },
     {
       id: 2,
-      title: "Advanced Routing & Switching",
-      dept: "ICT",
-      instructor: "James M.",
+      title: "Automotive Engine Diagnostics",
+      dept: "Automotive",
+      instructor: "Eng. Kamau",
       students: 42,
       progress: 40,
       status: "draft",
       offlineReady: false,
       size: "Pending",
       lastUpdated: "Yesterday",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=800&q=80",
-      description: "Advanced CCNP level routing protocols and enterprise switching architectures.",
+      image: "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&q=80",
+      description: "Advanced troubleshooting of modern EFI engines and mechanical tear-downs.",
       modules: 8,
       resources: 22,
       assessments: 4
     },
     {
       id: 3,
-      title: "Solar Power Systems & Maintenance",
-      dept: "Electrical",
-      instructor: "Dr. Omondi",
+      title: "Plumbing Technology Level 4",
+      dept: "Building Tech",
+      instructor: "Peter Ochieng",
       students: 88,
       progress: 100,
       status: "published",
       offlineReady: true,
       size: "850 MB",
       lastUpdated: "3 days ago",
-      image: "https://images.unsplash.com/photo-1509391366360-12822a16d8bd?w=800&q=80",
-      description: "Practical guide to installing and maintaining solar panels and inverters in TVET settings.",
+      image: "https://images.unsplash.com/photo-1505798577917-a65157d3320a?w=800&q=80",
+      description: "Practical curriculum covering pipe fitting, water supply networks, and sanitation systems.",
       modules: 15,
       resources: 60,
       assessments: 12
@@ -187,7 +187,7 @@ function LecturerCoursesComponent() {
                                 {i}
                              </div>
                              <div>
-                                <h4 className="font-black text-lg">Module {i}: Fundamentals of Networking</h4>
+                                <h4 className="font-black text-lg">Module {i}: Fundamentals of Solar Installation</h4>
                                 <p className="text-sm font-bold text-muted-foreground">4 Lessons • 2 Resources • 1 Quiz</p>
                              </div>
                           </div>
@@ -195,9 +195,9 @@ function LecturerCoursesComponent() {
                        </div>
                        <div className="bg-muted/20 border-t border-border/40 p-6 space-y-3">
                           {[
-                            { type: 'video', title: 'Introduction to OSI Model', duration: '12:45' },
-                            { type: 'pdf', title: 'Subnetting Cheat Sheet', size: '2.4 MB' },
-                            { type: 'quiz', title: 'TCP/IP Basics Assessment', questions: '15' }
+                            { type: 'video', title: 'Introduction to Photovoltaic Systems', duration: '12:45' },
+                            { type: 'pdf', title: 'Inverter Sizing Cheat Sheet', size: '2.4 MB' },
+                            { type: 'quiz', title: 'Basic Circuitry Assessment', questions: '15' }
                           ].map((lesson, idx) => (
                             <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-background/80 transition-all border border-transparent hover:border-border/40">
                                <div className="flex items-center gap-3">

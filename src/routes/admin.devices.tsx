@@ -55,6 +55,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { Device } from "@/types/admin";
 
 export const Route = createFileRoute("/admin/devices")({
   component: AdminDevicesComponent,
@@ -68,12 +69,12 @@ const deviceTypeData = [
 
 function AdminDevicesComponent() {
   const [view, setView] = useState<"list" | "detail">("list");
-  const [selectedDevice, setSelectedDevice] = useState<any>(null);
+  const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
-  const devices = [
+  const devices: Device[] = [
     {
       id: "DEV-S-001",
-      name: "SAMSUNG-TAB-02",
+      name: "SAMSUNG-TAB-A7",
       owner: "Amina Hussein",
       dept: "ICT",
       lastSync: "12 mins ago",
@@ -84,9 +85,9 @@ function AdminDevicesComponent() {
     },
     {
       id: "DEV-L-042",
-      name: "LENOVO-LP-14",
+      name: "HP-PROBOOK-450",
       owner: "David Mutua",
-      dept: "Electrical",
+      dept: "Electrical & Electronics",
       lastSync: "2 days ago",
       storage: "92%",
       health: "Warning",
@@ -95,20 +96,20 @@ function AdminDevicesComponent() {
     },
     {
       id: "DEV-S-112",
-      name: "IPAD-AIR-05",
+      name: "ITEL-PAD-1",
       owner: "Sarah Wanjiru",
-      dept: "ICT",
+      dept: "Food & Beverage",
       lastSync: "1 hour ago",
       storage: "45%",
       health: "Healthy",
       type: "Tablet",
-      os: "iPadOS 17"
+      os: "Android 12 Go"
     },
     {
       id: "DEV-M-205",
       name: "TECNO-CAMON-30",
       owner: "John Kamau",
-      dept: "Mechanical",
+      dept: "Automotive Engineering",
       lastSync: "3 days ago",
       storage: "95%",
       health: "Low Storage",
@@ -117,7 +118,7 @@ function AdminDevicesComponent() {
     }
   ];
 
-  const handleOpenDevice = (dev: any) => {
+  const handleOpenDevice = (dev: Device) => {
     setSelectedDevice(dev);
     setView("detail");
   };

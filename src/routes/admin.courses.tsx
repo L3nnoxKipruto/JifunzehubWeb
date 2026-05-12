@@ -52,6 +52,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { Course } from "@/types/admin";
 
 export const Route = createFileRoute("/admin/courses")({
   component: AdminCoursesComponent,
@@ -68,12 +69,12 @@ const courseEngagementData = [
 
 function AdminCoursesComponent() {
   const [view, setView] = useState<"list" | "detail">("list");
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
-  const courses = [
+  const courses: Course[] = [
     {
       id: "CRS-101",
-      title: "Networking Essentials (CCNA Foundations)",
+      title: "Networking Essentials (CCNA)",
       dept: "ICT",
       lecturer: "James M. Macharia",
       students: 412,
@@ -84,7 +85,7 @@ function AdminCoursesComponent() {
     },
     {
       id: "CRS-102",
-      title: "Solar Power Systems & Maintenance",
+      title: "Solar Photovoltaic Installation",
       dept: "Electrical",
       lecturer: "Dr. Sarah Omondi",
       students: 215,
@@ -106,18 +107,29 @@ function AdminCoursesComponent() {
     },
     {
       id: "CRS-104",
-      title: "Intro to Python for Engineering",
-      dept: "ICT",
-      lecturer: "Prof. Amina Wanjiku",
-      students: 520,
+      title: "Plumbing Technology Level 4",
+      dept: "Building Tech",
+      lecturer: "Peter Ochieng",
+      students: 120,
       progress: 92,
       status: "Published",
       offline: "Compatible",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80"
+      image: "https://images.unsplash.com/photo-1505798577917-a65157d3320a?w=800&q=80"
+    },
+    {
+      id: "CRS-105",
+      title: "Food and Beverage Service & Sales",
+      dept: "Hospitality",
+      lecturer: "Grace Wanjiku",
+      students: 320,
+      progress: 78,
+      status: "Published",
+      offline: "Compatible",
+      image: "https://images.unsplash.com/photo-1414235077428-33898ed1e81a?w=800&q=80"
     }
   ];
 
-  const handleOpenCourse = (course: any) => {
+  const handleOpenCourse = (course: Course) => {
     setSelectedCourse(course);
     setView("detail");
   };
@@ -306,7 +318,7 @@ function AdminCoursesComponent() {
           </div>
 
           <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
-            {["All Courses", "Published", "Drafts", "ICT Dept", "Engineering", "Electrical", "Mechanical", "Offline Ready"].map((cat, i) => (
+            {["All Courses", "Published", "Drafts", "ICT Dept", "Building Tech", "Electrical", "Hospitality", "Offline Ready"].map((cat, i) => (
               <Badge key={i} variant={i === 0 ? "default" : "outline"} className="px-6 py-2 rounded-xl font-black cursor-pointer whitespace-nowrap">
                 {cat}
               </Badge>

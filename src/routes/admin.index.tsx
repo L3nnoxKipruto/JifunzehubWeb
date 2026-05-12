@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import {
   Card,
@@ -70,26 +70,26 @@ function AdminOverviewComponent() {
         {/* Header Action Row */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2">
-            <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl md:text-4xl font-black tracking-tight flex items-center gap-3">
               Welcome back, Amina 👋
             </h1>
-            <p className="text-lg text-muted-foreground font-medium">
+            <p className="text-base md:text-lg text-muted-foreground font-medium">
               Here’s the current operational status of Kisumu Polytechnic.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
-              <Plus className="w-5 h-5 mr-2" /> Add Student
+            <Button asChild className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
+              <Link to="/admin/students"><Plus className="w-5 h-5 mr-2" /> Add Student</Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <Plus className="w-5 h-5 mr-2" /> Add Lecturer
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/admin/lecturers"><Plus className="w-5 h-5 mr-2" /> Add Lecturer</Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <RefreshCw className="w-5 h-5 mr-2" /> Sync Institution
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/admin/local-server"><RefreshCw className="w-5 h-5 mr-2" /> Sync Institution</Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <FileDown className="w-5 h-5 mr-2" /> Generate Reports
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/admin/analytics"><FileDown className="w-5 h-5 mr-2" /> Generate Reports</Link>
             </Button>
           </div>
         </div>
@@ -131,7 +131,7 @@ function AdminOverviewComponent() {
                    </div>
                 </div>
 
-                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-2xl">
+                <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 shadow-2xl">
                    <div className="h-[350px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                          <AreaChart data={engagementData}>
@@ -208,7 +208,7 @@ function AdminOverviewComponent() {
                       </div>
                    </Card>
 
-                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] p-6 shadow-xl">
+                   <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] p-5 md:p-6 shadow-xl">
                       <div className="flex justify-between items-center mb-6">
                          <h4 className="font-black flex items-center gap-2 text-amber-500">
                             <RefreshCw className="w-5 h-5" /> Sync Infrastructure
@@ -226,7 +226,7 @@ function AdminOverviewComponent() {
                             <span className="text-xs font-bold flex-1">Course Media Push</span>
                             <span className="text-[10px] font-black text-muted-foreground uppercase">65%</span>
                          </div>
-                         <Button variant="ghost" className="w-full text-[10px] font-black uppercase tracking-widest text-primary h-8">View Detailed Queue</Button>
+                         <Button asChild variant="ghost" className="w-full text-[10px] font-black uppercase tracking-widest text-primary h-8"><Link to="/admin/local-server">View Detailed Queue</Link></Button>
                       </div>
                    </Card>
                 </div>
@@ -236,8 +236,8 @@ function AdminOverviewComponent() {
           {/* Right Column: Feed & Alerts */}
           <div className="space-y-10">
              {/* Live Activity Feed */}
-             <Card className="border-border/40 bg-card/50 rounded-[2.5rem] overflow-hidden shadow-xl">
-                <CardHeader className="p-8 pb-4 border-b border-border/40 flex flex-row items-center justify-between">
+             <Card className="border-border/40 bg-card/50 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden shadow-xl">
+                <CardHeader className="p-6 md:p-8 pb-4 border-b border-border/40 flex flex-row items-center justify-between">
                    <CardTitle className="text-xl font-black">Live Institutional Feed</CardTitle>
                    <div className="flex gap-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></div>
@@ -252,7 +252,7 @@ function AdminOverviewComponent() {
                         { title: "Sync Event", desc: "Library Node 2 completed weekly backup", time: "45m ago", icon: Database, color: "text-emerald-500" },
                         { title: "New Device", desc: "Android-Tab-Kisumu detected in Mech Lab", time: "2h ago", icon: Laptop, color: "text-purple-500" },
                       ].map((act, i) => (
-                        <div key={i} className="p-6 flex gap-4 hover:bg-muted/30 transition-all cursor-pointer group">
+                        <div key={i} className="p-4 sm:p-6 flex gap-4 hover:bg-muted/30 transition-all cursor-pointer group">
                            <div className={`mt-1 ${act.color} group-hover:scale-110 transition-transform`}>
                               <act.icon className="w-5 h-5" />
                            </div>
@@ -265,13 +265,13 @@ function AdminOverviewComponent() {
                       ))}
                    </div>
                    <div className="p-4 bg-muted/20 border-t border-border/40">
-                      <Button variant="ghost" className="w-full font-black text-sm text-primary hover:bg-primary/5">View Full Log</Button>
+                      <Button asChild variant="ghost" className="w-full font-black text-sm text-primary hover:bg-primary/5"><Link to="/admin/analytics">View Full Log</Link></Button>
                    </div>
                 </CardContent>
              </Card>
 
              {/* Recent Alerts */}
-             <Card className="border-destructive/20 bg-destructive/5 rounded-[2.5rem] p-8 shadow-xl relative overflow-hidden group">
+             <Card className="border-destructive/20 bg-destructive/5 rounded-[2rem] md:rounded-[2.5rem] p-6 sm:p-8 shadow-xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                    <AlertTriangle className="w-32 h-32" />
                 </div>
@@ -288,7 +288,7 @@ function AdminOverviewComponent() {
                       <p className="text-xs font-medium text-muted-foreground">14 student devices failed to sync assessments this morning.</p>
                    </div>
                 </div>
-                <Button variant="destructive" className="w-full mt-6 rounded-2xl h-12 font-black shadow-lg">Open Incident Center</Button>
+                <Button asChild variant="destructive" className="w-full mt-6 rounded-2xl h-12 font-black shadow-lg"><Link to="/admin/local-server">Open Incident Center</Link></Button>
              </Card>
           </div>
         </div>

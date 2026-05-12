@@ -65,8 +65,8 @@ function AssessmentsComponent() {
   const upcomingAssessments = [
     {
       id: 1,
-      title: "Electrical Safety Quiz",
-      subject: "Electrical Engineering",
+      title: "Solar Site Assessment Quiz",
+      subject: "Solar PV Installation",
       duration: "30 mins",
       attempts: "1 Remaining",
       offlineMode: true,
@@ -102,20 +102,20 @@ function AssessmentsComponent() {
     },
     {
       id: 102,
-      title: "Workshop Safety Lab",
+      title: "Solar Panel Mounting Lab",
       score: 74,
       date: "April 28, 2026",
       status: "Passed",
-      feedback: "Good, but need to review fire safety protocols.",
+      feedback: "Good, but need to review roof angle calculations.",
       breakdown: [
-        { topic: "Tool Handling", score: 90 },
-        { topic: "Fire Safety", score: 50 },
-        { topic: "First Aid", score: 85 },
+        { topic: "Angle Optimization", score: 90 },
+        { topic: "Roof Integrity", score: 50 },
+        { topic: "Safety Harness Use", score: 85 },
       ],
     },
     {
       id: 103,
-      title: "Basic Circuit Theory",
+      title: "DC Circuit Calculation",
       score: 45,
       date: "April 15, 2026",
       status: "Resit Required",
@@ -130,7 +130,7 @@ function AssessmentsComponent() {
 
   const flashcardSets = [
     { id: 1, title: "Networking Terms", count: 42, progress: 65, color: "bg-blue-500" },
-    { id: 2, title: "Electrical Symbols", count: 28, progress: 90, color: "bg-emerald-500" },
+    { id: 2, title: "Solar Components", count: 28, progress: 90, color: "bg-emerald-500" },
     { id: 3, title: "Linux Commands", count: 56, progress: 20, color: "bg-purple-500" },
   ];
 
@@ -144,7 +144,7 @@ function AssessmentsComponent() {
     },
     {
       id: 202,
-      title: "Common Electrical Faults",
+      title: "Inverter Troubleshooting",
       questions: 15,
       difficulty: "Intermediate",
       completed: true,
@@ -367,17 +367,36 @@ function AssessmentsComponent() {
                       </div>
 
                       <div className="flex gap-3">
-                        {exam.buttons.map((btn, i) => (
-                          <Button 
-                            key={btn} 
-                            variant={i === 0 ? "default" : "outline"} 
-                            className={`flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-[10px] shadow-lg transition-all duration-300 ${i === 0 ? "hover:translate-y-[-2px] hover:shadow-primary/20" : ""}`}
-                          >
-                            {btn === "Download for Offline" && <Download className="w-3.5 h-3.5 mr-2" />}
-                            {btn === "Start Quiz" && <PlayCircle className="w-3.5 h-3.5 mr-2" />}
-                            {btn}
-                          </Button>
-                        ))}
+                        {exam.buttons.map((btn, i) => {
+                          const isLink = btn === "Start Quiz" || btn === "Review Materials";
+                          const href = btn === "Start Quiz" ? `/dashboard/assessments/${exam.id}` : `/dashboard/player/CRS-101`;
+                          
+                          return (
+                            <Button 
+                              key={btn} 
+                              asChild={isLink}
+                              variant={i === 0 ? "default" : "outline"} 
+                              className={`flex-1 rounded-2xl font-black h-12 uppercase tracking-widest text-[10px] shadow-lg transition-all duration-300 ${i === 0 ? "hover:translate-y-[-2px] hover:shadow-primary/20" : ""}`}
+                              onClick={!isLink ? () => {
+                                import("sonner").then(({ toast }) => {
+                                  toast.success(`${btn} initialized!`);
+                                });
+                              } : undefined}
+                            >
+                              {isLink ? (
+                                <Link to={href}>
+                                  {btn === "Start Quiz" && <PlayCircle className="w-3.5 h-3.5 mr-2" />}
+                                  {btn}
+                                </Link>
+                              ) : (
+                                <>
+                                  {btn === "Download for Offline" && <Download className="w-3.5 h-3.5 mr-2" />}
+                                  {btn}
+                                </>
+                              )}
+                            </Button>
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>

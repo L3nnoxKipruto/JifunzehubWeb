@@ -31,6 +31,8 @@ import {
   Radar,
   Legend,
 } from "recharts";
+import { motion } from "framer-motion";
+import { MotionPage, MotionCard, MotionList, motionItem } from "@/components/animations/MotionPage";
 import {
   Download,
   Calendar,
@@ -96,39 +98,45 @@ function AdminAnalyticsComponent() {
            </div>
         </div>
 
+
+
         {/* Intelligence Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
-           {[
-             { label: "Active Learners", value: "1,248", trend: "+12%", up: true, icon: Users },
-             { label: "Sync Integrity", value: "98.4%", trend: "+2%", up: true, icon: Activity },
-             { label: "Course Completion", value: "74.2%", trend: "-5%", up: false, icon: BookOpen },
-             { label: "Offline Engagement", value: "88%", trend: "+15%", up: true, icon: WifiOff },
-             { label: "Assessment Avg", value: "76%", trend: "+3%", up: true, icon: Zap },
-             { label: "Infrastructure Hubs", value: "12/12", trend: "Stable", up: true, icon: Database },
-           ].map((stat, i) => (
-             <Card key={i} className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] p-6 shadow-xl relative overflow-hidden group">
-                <div className="space-y-3 relative z-10">
-                   <div className="flex justify-between items-start">
-                      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest leading-tight">{stat.label}</p>
-                      <stat.icon className="w-4 h-4 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
-                   </div>
-                   <h3 className="text-2xl font-black">{stat.value}</h3>
-                   <div className={`flex items-center gap-1 text-[10px] font-black ${stat.up ? 'text-success' : 'text-destructive'}`}>
-                      {stat.up ? <ArrowUpRight className="w-3 h-3" /> : <TrendingUp className="w-3 h-3 rotate-180" />}
-                      {stat.trend}
-                   </div>
-                </div>
-             </Card>
-           ))}
-        </div>
+        <MotionList>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
+             {[
+               { label: "Active Learners", value: "1,248", trend: "+12%", up: true, icon: Users },
+               { label: "Sync Integrity", value: "98.4%", trend: "+2%", up: true, icon: Activity },
+               { label: "Course Completion", value: "74.2%", trend: "-5%", up: false, icon: BookOpen },
+               { label: "Offline Engagement", value: "88%", trend: "+15%", up: true, icon: WifiOff },
+               { label: "Assessment Avg", value: "76%", trend: "+3%", up: true, icon: Zap },
+               { label: "Infrastructure Hubs", value: "12/12", trend: "Stable", up: true, icon: Database },
+             ].map((stat, i) => (
+               <motion.div variants={motionItem} key={i}>
+                 <Card className="border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] p-6 shadow-xl relative overflow-hidden group h-full">
+                    <div className="space-y-3 relative z-10">
+                       <div className="flex justify-between items-start">
+                          <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest leading-tight">{stat.label}</p>
+                          <stat.icon className="w-4 h-4 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
+                       </div>
+                       <h3 className="text-2xl font-black">{stat.value}</h3>
+                       <div className={`flex items-center gap-1 text-[10px] font-black ${stat.up ? 'text-success' : 'text-destructive'}`}>
+                          {stat.up ? <ArrowUpRight className="w-3 h-3" /> : <TrendingUp className="w-3 h-3 rotate-180" />}
+                          {stat.trend}
+                       </div>
+                    </div>
+                 </Card>
+               </motion.div>
+             ))}
+          </div>
+        </MotionList>
 
         <div className="grid lg:grid-cols-3 gap-8">
            {/* Global Usage Trends */}
-           <Card className="lg:col-span-2 border-border/40 bg-card/40 backdrop-blur-sm rounded-[2.5rem] p-8 shadow-xl">
-              <div className="flex justify-between items-center mb-10">
+           <Card className="lg:col-span-2 border-border/40 bg-card/40 backdrop-blur-sm rounded-[2rem] md:rounded-[2.5rem] p-5 sm:p-8 shadow-xl">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
                  <div>
-                    <h3 className="text-3xl font-black tracking-tighter uppercase">Platform Growth & Usage</h3>
-                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Multi-dimensional tracking of institutional adoption</p>
+                    <h3 className="text-2xl md:text-3xl font-black tracking-tighter uppercase leading-tight">Platform Growth & Usage</h3>
+                    <p className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Multi-dimensional tracking of institutional adoption</p>
                  </div>
                  <div className="flex gap-4">
                     <div className="flex items-center gap-2">

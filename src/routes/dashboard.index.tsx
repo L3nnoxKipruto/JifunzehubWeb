@@ -37,10 +37,28 @@ export const Route = createFileRoute("/dashboard/")({
   component: DashboardComponent,
 });
 
+import { useState, useEffect } from "react";
+import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
+
 function DashboardComponent() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   const currentHour = new Date().getHours();
   const greeting =
     currentHour < 12 ? "Good morning" : currentHour < 18 ? "Good afternoon" : "Good evening";
+
+  if (isLoading) {
+    return (
+      <DashboardLayout role="student">
+        <DashboardSkeleton />
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout role="student">
@@ -48,26 +66,34 @@ function DashboardComponent() {
         {/* Header & Quick Actions */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-1">
-            <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl md:text-4xl font-black tracking-tight flex items-center gap-3">
               Karibu, Amina 👋
             </h1>
-            <p className="text-lg text-muted-foreground font-medium">
+            <p className="text-base md:text-lg text-muted-foreground font-medium">
               Here’s what’s happening in your learning journey today.
             </p>
           </div>
           
           <div className="flex flex-wrap gap-3">
-            <Button className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
-              <PlayCircle className="w-5 h-5 mr-2" /> Resume Learning
+            <Button asChild className="h-12 px-6 rounded-2xl font-black shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
+              <Link to="/dashboard/player/CRS-101">
+                <PlayCircle className="w-5 h-5 mr-2" /> Resume Learning
+              </Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <RefreshCw className="w-5 h-5 mr-2" /> Sync Now
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/dashboard/sync">
+                <RefreshCw className="w-5 h-5 mr-2" /> Sync Now
+              </Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <ClipboardList className="w-5 h-5 mr-2" /> View Assignments
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/dashboard/assignments">
+                <ClipboardList className="w-5 h-5 mr-2" /> View Assignments
+              </Link>
             </Button>
-            <Button variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
-              <Download className="w-5 h-5 mr-2" /> Download Lessons
+            <Button asChild variant="outline" className="h-12 px-6 rounded-2xl font-black border-border/60 hover:bg-muted">
+              <Link to="/dashboard/downloads">
+                <Download className="w-5 h-5 mr-2" /> Download Lessons
+              </Link>
             </Button>
           </div>
         </div>
@@ -82,7 +108,7 @@ function DashboardComponent() {
             { label: "Pending Tasks", value: "2", icon: FileCheck, color: "text-rose-500", bg: "bg-rose-500/10" },
             { label: "Sync Health", value: "Good", icon: Activity, color: "text-success", bg: "bg-success/10" },
           ].map((stat, i) => (
-            <Card key={i} className="border-border/40 bg-card/50 backdrop-blur-sm rounded-[2rem] p-6 shadow-xl hover:-translate-y-1 transition-all">
+            <Card key={i} className="border-border/40 bg-card/50 backdrop-blur-sm rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-6 shadow-xl hover:-translate-y-1 transition-all">
               <div className={`p-3 rounded-2xl w-fit ${stat.bg} ${stat.color} mb-4`}>
                 <stat.icon className="w-6 h-6" />
               </div>
@@ -106,24 +132,24 @@ function DashboardComponent() {
                   <div className="w-2 h-8 bg-primary rounded-full"></div>
                   Continue Learning
                 </h2>
-                <Button variant="link" className="text-primary font-black">View All My Courses</Button>
+                <Button asChild variant="link" className="text-primary font-black"><Link to="/dashboard/courses">View All My Courses</Link></Button>
               </div>
 
               <div className="grid gap-6">
                 {[
                   {
-                    title: "Networking Essentials (CCNA Foundations)",
-                    lesson: "Lesson 14 — Subnetting in Practice",
+                    title: "Solar Installation & Maintenance",
+                    lesson: "Lesson 4 — Battery Bank Sizing",
                     progress: 73,
-                    thumb: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80",
-                    badge: "CCNA",
+                    thumb: "https://images.unsplash.com/photo-1509391366360-12822a16d8bd?w=800&q=80",
+                    badge: "CORE",
                     offline: true
                   },
                   {
-                    title: "Solar Installation & Maintenance",
-                    lesson: "Lab 3 — Panel Angle & Inverter Wiring",
+                    title: "Plumbing Technology Level 4",
+                    lesson: "Lab 3 — Pipe Bending Techniques",
                     progress: 41,
-                    thumb: "https://images.unsplash.com/photo-1509391366360-fe5bb65858eb?w=800&q=80",
+                    thumb: "https://images.unsplash.com/photo-1505798577917-a65157d3320a?w=800&q=80",
                     badge: "Practical",
                     offline: false
                   }
@@ -147,8 +173,12 @@ function DashboardComponent() {
                         </div>
                       </div>
                       <div className="flex gap-2 mt-4">
-                        <Button size="sm" className="bg-primary/10 text-primary hover:bg-primary hover:text-white font-black rounded-xl">Resume</Button>
-                        <Button size="sm" variant="outline" className="font-bold rounded-xl border-border/60">Open Notes</Button>
+                        <Button asChild size="sm" className="bg-primary/10 text-primary hover:bg-primary hover:text-white font-black rounded-xl">
+                          <Link to="/dashboard/player/CRS-101">Resume</Link>
+                        </Button>
+                        <Button asChild size="sm" variant="outline" className="font-bold rounded-xl border-border/60">
+                          <Link to="/dashboard/player/CRS-101">Open Notes</Link>
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -235,16 +265,16 @@ function DashboardComponent() {
               <CardContent className="p-0">
                 <div className="divide-y divide-border/40">
                   {[
-                    { title: "Network Design Assignment", date: "Tomorrow", color: "text-destructive", bg: "bg-destructive/10" },
-                    { title: "Electrical Safety Quiz", date: "In 2 Days", color: "text-amber-600", bg: "bg-amber-500/10" },
-                    { title: "Hospitality Reflection Journal", date: "Friday", color: "text-blue-600", bg: "bg-blue-500/10" }
+                    { title: "Solar Array Sizing Lab", date: "Tomorrow", color: "text-destructive", bg: "bg-destructive/10" },
+                    { title: "Battery Sizing Quiz", date: "In 2 Days", color: "text-amber-600", bg: "bg-amber-500/10" },
+                    { title: "Engine Diagnostics Journal", date: "Friday", color: "text-blue-600", bg: "bg-blue-500/10" }
                   ].map((d, i) => (
                     <div key={i} className="p-6 hover:bg-muted/30 transition-all cursor-pointer group">
                       <div className="flex justify-between items-start mb-1">
                         <h4 className="font-black text-sm group-hover:text-primary transition-colors">{d.title}</h4>
                         <Badge className={`${d.bg} ${d.color} border-none text-[10px] font-black`}>{d.date}</Badge>
                       </div>
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">ICT Department</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Electrical Department</p>
                     </div>
                   ))}
                 </div>
@@ -264,7 +294,7 @@ function DashboardComponent() {
               <CardContent className="p-0">
                 <div className="divide-y divide-border/40">
                   {[
-                    { title: "New Material Uploaded", desc: "Eng. Kamau added Module 15: VPNs", type: "course" },
+                    { title: "New Material Uploaded", desc: "Dr. Omondi added Module 4: Inverters", type: "course" },
                     { title: "Assignment Graded", desc: "Your Practical 3 submission scored 92%", type: "grade" },
                     { title: "Sync Successful", desc: "All local data pushed to campus server", type: "sync" }
                   ].map((n, i) => (
